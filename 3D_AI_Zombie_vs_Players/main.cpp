@@ -1,13 +1,61 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
-
 #include <stdlib.h>
 #include <windows.h>
 #include <math.h>
+//IMPORTANT polygons MUST be drawn counter-clockwise
+//design using https://technology.cpm.org/general/3dgraph/
 
+class fPerson{//TODO create first person shooter with shooting animation
+public:
+    int direction;
+    //notes please don't touch
+    static void drawLeftArm()
+    {
+        glPushMatrix();
+        glColor3f(0,0.9,0);
+        glCullFace(GL_NONE);
+        glBegin(GL_POLYGON);
+        glVertex3d(2,4,-2);
+        glVertex3d(-2,4,-2);
+        glVertex3d(-2,4,2);
+        glVertex3d(2,4,2);
+        glEnd();
+
+
+        glPopMatrix();
+    }
+
+
+};
+
+//NOTICE nice to do's are super hard to accomplish don't waste time on those if you don't have it
+
+class zombie{//TODO create zombie draw function
+public:
+    //notes drawing the face with
+
+    //nice to do's u can use a texture as the face of the zombie instead of drawing yourself
+    //but i couldn't find enough resources that teach that
+
+    //          ||
+    //        \ || /
+    //checkout \  /
+    //          \/
+    //https://www.youtube.com/watch?v=dV1E8vzoGb0
+    //https://community.khronos.org/t/loading-a-bitmap-image-to-use-it-as-a-texture-background-on-canvas-for-drawing/72323
+
+};
+class tree{//TODO create tree draw function
+public:
+    //notes drawing a cone manually is gonna be hard or impossible i tried with the cylinder
+    //construct the tree out of pyramids instead
+
+    ////nice to do's same as the above
+};
 float xRotated = 90.0, yRotated = 0.0, zRotated = 0.0;
-
+float x=0;
 //------------------------------  reshapeFunc  ---------------------------------
 
 void reshapeFunc (int w, int h)
@@ -15,7 +63,7 @@ void reshapeFunc (int w, int h)
     glViewport(0,0,(GLsizei)w,(GLsizei)h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective (40.0, (GLdouble)w / (GLdouble)h, 0.5, 20.0);
+    gluPerspective (45.0, (GLdouble)w / (GLdouble)h, 0.5, 100.0);
     glMatrixMode(GL_MODELVIEW);
 }
 
@@ -26,12 +74,11 @@ void display (void)
 
     glClear        (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity ();
-    glTranslatef    (0.0, 0.0, -15.0);
-
+    glTranslatef    (0.0, 0.0, -20.0);
+    glRotated(x,1,0,0);
 	//Your code is written here
-
-
-
+    fPerson::drawLeftArm();//replace this with the draw function you want to test
+    x+=0.1;
     glutSwapBuffers();
 }
 

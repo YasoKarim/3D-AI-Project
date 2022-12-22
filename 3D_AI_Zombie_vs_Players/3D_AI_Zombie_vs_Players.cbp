@@ -8,7 +8,7 @@
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/Debug/3D_AI_Zombie_vs_Players" prefix_auto="1" extension_auto="1" />
-				<Option working_dir="D:/Programs/CodeBlocks/MinGW/bin" />
+				<Option working_dir="D:/Programs/CodeBlocks_Old/CodeBlocks/MinGW/bin" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -18,7 +18,7 @@
 			</Target>
 			<Target title="Release">
 				<Option output="bin/Release/3D_AI_Zombie_vs_Players" prefix_auto="1" extension_auto="1" />
-				<Option working_dir="D:/Programs/CodeBlocks/MinGW/bin" />
+				<Option working_dir="D:/Programs/CodeBlocks_Old/CodeBlocks/MinGW/bin" />
 				<Option object_output="obj/Release/" />
 				<Option type="0" />
 				<Option compiler="gcc" />
@@ -32,15 +32,15 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add directory="D:/Programs/CodeBlocks/MinGW/include" />
+			<Add directory="D:/Programs/CodeBlocks_Old/CodeBlocks/MinGW/include" />
 		</Compiler>
 		<Linker>
-			<Add library="glut32" />
+			<Add library="freeglut" />
 			<Add library="opengl32" />
 			<Add library="glu32" />
 			<Add library="winmm" />
 			<Add library="gdi32" />
-			<Add directory="D:/Programs/CodeBlocks/MinGW/lib" />
+			<Add directory="D:/Programs/CodeBlocks_Old/CodeBlocks/MinGW/lib" />
 		</Linker>
 		<Unit filename="main.cpp" />
 		<Extensions>
