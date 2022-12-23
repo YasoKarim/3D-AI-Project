@@ -7,23 +7,78 @@
 //IMPORTANT polygons MUST be drawn counter-clockwise
 //design using https://technology.cpm.org/general/3dgraph/
 
+class basicShapes{//NOTICE any basic shapes are drawn here then scaled to desired size DON'T draw basic shapes manually inside game classes
+public:
+    static void cuboid(double width=1.0,double length=1.0,double height=1.0){
+        glPushMatrix();
+        glScaled(width,height,length);
+        //glCullFace(GL_NONE);
+        //top
+        glBegin(GL_POLYGON);
+        glVertex3d(1,1,-1);
+        glVertex3d(-1,1,-1);
+        glVertex3d(-1,1,1);
+        glVertex3d(1,1,1);
+        glEnd();
+
+        //bottom
+        glBegin(GL_POLYGON);
+        glVertex3d(1,-1,1);
+        glVertex3d(-1,-1,1);
+        glVertex3d(-1,-1,-1);
+        glVertex3d(1,-1,-1);
+        glEnd();
+
+        //front
+        glBegin(GL_POLYGON);
+        glVertex3d(1,1,1);
+        glVertex3d(-1,1,1);
+        glVertex3d(-1,-1,1);
+        glVertex3d(1,-1,1);
+        glEnd();
+
+        //rear
+        glBegin(GL_POLYGON);
+        glVertex3d(-1,1,-1);
+        glVertex3d(1,1,-1);
+        glVertex3d(1,-1,-1);
+        glVertex3d(-1,-1,-1);
+        glEnd();
+
+        //right
+        glBegin(GL_POLYGON);
+        glVertex3d(1,1,-1);
+        glVertex3d(1,1,1);
+        glVertex3d(1,-1,1);
+        glVertex3d(1,-1,-1);
+        glEnd();
+
+        //right
+        glBegin(GL_POLYGON);
+        glVertex3d(-1,1,1);
+        glVertex3d(-1,1,-1);
+        glVertex3d(-1,-1,-1);
+        glVertex3d(-1,-1,1);
+        glEnd();
+
+        glPopMatrix();
+    }
+};
+
+
+
 class fPerson{//TODO create first person shooter with shooting animation
 public:
     int direction;
-    //notes please don't touch
     static void drawLeftArm()
     {
         glPushMatrix();
         glColor3f(0,0.9,0);
-        glCullFace(GL_NONE);
-        glBegin(GL_POLYGON);
-        glVertex3d(2,4,-2);
-        glVertex3d(-2,4,-2);
-        glVertex3d(-2,4,2);
-        glVertex3d(2,4,2);
-        glEnd();
 
-
+        glRotated(80,-1,0,0);
+        glRotated(30,0,0,-1);
+        glTranslated(7.5,-15,2);
+        basicShapes::cuboid(0.2,0.2,0.6);
         glPopMatrix();
     }
 
@@ -51,6 +106,7 @@ class tree{//TODO create tree draw function
 public:
     //notes drawing a cone manually is gonna be hard or impossible i tried with the cylinder
     //construct the tree out of pyramids instead
+    //code the pyramid inside basicShapes class in a separate function
 
     ////nice to do's same as the above
 };
@@ -75,10 +131,10 @@ void display (void)
     glClear        (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity ();
     glTranslatef    (0.0, 0.0, -20.0);
-    glRotated(x,1,0,0);
+    //glRotated(x,1,1,0);
 	//Your code is written here
     fPerson::drawLeftArm();//replace this with the draw function you want to test
-    x+=0.1;
+    //x+=0.1;
     glutSwapBuffers();
 }
 
