@@ -65,6 +65,11 @@ public:
 
         glPopMatrix();
     }
+public:
+    static void sphere(int radius)
+    {
+
+    }
 };
 
 bool right=false,left=false,forw=false,backw=false;
@@ -77,13 +82,6 @@ void keyboard(unsigned char key,int x,int y)
         exit(0);
     else if(key == 'f')
         glutFullScreen();
-
-
-
-
-
-
-
 
     if(key=='w'){
         forw=true;
@@ -119,7 +117,8 @@ public:
     int direction;
     static void drawLeftArm()
     {
-            glPushMatrix();
+
+        glPushMatrix();
         glTranslated(0,-0.5,18.5);
         //left arm
         glPushMatrix();
@@ -184,7 +183,8 @@ class zombie
 public:
     //int speed;
 
-    static void drawZ(){
+    static void drawZ()
+    {
         zombie::drawhead();
         zombie::Body();
         zombie::leftLeg();
@@ -195,7 +195,7 @@ public:
     static void drawhead()
     {
         glPushMatrix();
-        glColor3f(0,0.9,0);
+        glColor3f(0,0.7,0);
         glTranslated(0,0.1,0);
         glRotated(45,0,1,0);
         basicShapes::cuboid(0.7,0.7,0.7);
@@ -218,10 +218,11 @@ public:
     {
 
         glPushMatrix();
-        glColor3f(0,0.9,0);
-        glTranslated(-0.5,-3.7,2.9);
+        glColor3f(0,0.5,0);
+        glTranslated(-0.2,-3.7,0);
         glRotated(45,0,1,0);
-        basicShapes::cuboid(0.4,0.2,0.5);
+//      basicShapes::cuboid(0.4,0.2,0.4);
+        basicShapes::cuboid(0.3,0.2,0.5);
         glPopMatrix();
 
     }
@@ -231,10 +232,12 @@ public:
     {
 
         glPushMatrix();
-        glColor3f(0,0.9,0);
-        glTranslated(0.5,-3.7,2.9);
+        glColor3f(0,0.5,0);
+        //glTranslated(0.5,-3.7,2.9);
+        glTranslated(0.5,-3.7,0);
         glRotated(45,0,1,0);
-        basicShapes::cuboid(0.4,0.2,0.5);
+        //basicShapes::cuboid(0.4,0.2,0.5);
+        basicShapes::cuboid(0.3,0.2,0.5);
         glPopMatrix();
 
     }
@@ -251,6 +254,9 @@ public:
     //https://community.khronos.org/t/loading-a-bitmap-image-to-use-it-as-a-texture-background-on-canvas-for-drawing/72323
 
 
+};
+class zombieSnowMan{
+public:
 };
 
 class tree{//TODO create tree draw function
@@ -288,9 +294,9 @@ void display (void)
 
     glPushMatrix();
     //calculate position
-    if(left==true)movX+=0.1;
+    if(left==true)  movX+=0.1;
     if(right==true) movX-=0.1;
-    if(forw==true) movZ+=0.1;
+    if(forw==true)  movZ+=0.1;
     if(backw==true) movZ-=0.1;
 
     glTranslatef    (movX, 0.0, movZ);
