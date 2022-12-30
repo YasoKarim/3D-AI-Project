@@ -6,8 +6,10 @@
 #include <math.h>
 //IMPORTANT polygons MUST be drawn counter-clockwise
 //design using https://technology.cpm.org/general/3dgraph/
+void keyboard(unsigned char key,int x,int y);
 
-class basicShapes{//NOTICE any basic shapes are drawn here then scaled to desired size DON'T draw basic shapes manually inside game classes
+class basicShapes{
+//NOTICE any basic shapes are drawn here then scaled to desired size DON'T draw basic shapes manually inside game classes
 public:
     static void cuboid(double width=1.0,double length=1.0,double height=1.0){
         glPushMatrix();
@@ -64,7 +66,14 @@ public:
         glPopMatrix();
     }
 };
-
+//Key usage to Esc or Fullscreen
+void keyboard(unsigned char key,int x,int y)
+{
+   if(key == 27)
+    exit(0);
+   if(key == 'f')
+    glutFullScreen();
+}
 
 
 class fPerson{//TODO create first person shooter with shooting animation
@@ -72,7 +81,7 @@ public:
     int direction;
     static void drawLeftArm()
     {
-        glPushMatrix();
+            glPushMatrix();
         glTranslated(0,-0.5,18.5);
         //left arm
         glPushMatrix();
@@ -124,8 +133,6 @@ public:
         glPopMatrix();
         //glPopMatrix();
         glPopMatrix();
-
-
     }
 
 
@@ -133,8 +140,58 @@ public:
 
 //NOTICE nice to do's are super hard to accomplish don't waste time on those if you don't have it
 
-class zombie{//TODO create zombie draw function
+class zombie
+{
+//TODO create zombie draw function
 public:
+    //int speed;
+    //Drawing head
+    static void drawhead()
+    {
+        glPushMatrix();
+        glColor3f(0,0.9,0);
+        glTranslated(0,0.1,0);
+        glRotated(45,0,1,0);
+        basicShapes::cuboid(0.7,0.7,0.7);
+        glPopMatrix();
+
+    }
+    //Drawing the body
+    static void Body()
+    {
+        glPushMatrix();
+        glColor3f(0,0.9,0);
+        glTranslated(0,-2.2,0);
+        glRotated(45,0,1,0);
+        basicShapes::cuboid(0.5,1.2,1.5);
+        glPopMatrix();
+    }
+
+    //Drawing th left leg
+    static void leftLeg()
+    {
+
+        glPushMatrix();
+        glColor3f(0,0.9,0);
+        glTranslated(-0.5,-3.7,2.9);
+        glRotated(45,0,1,0);
+        basicShapes::cuboid(0.4,0.2,0.5);
+        glPopMatrix();
+
+    }
+
+    //Drawing the right leg
+    static void rightLeg()
+    {
+
+        glPushMatrix();
+        glColor3f(0,0.9,0);
+        glTranslated(0.5,-3.7,2.9);
+        glRotated(45,0,1,0);
+        basicShapes::cuboid(0.4,0.2,0.5);
+        glPopMatrix();
+
+    }
     //notes drawing the face with
 
     //nice to do's u can use a texture as the face of the zombie instead of drawing yourself
@@ -147,7 +204,9 @@ public:
     //https://www.youtube.com/watch?v=dV1E8vzoGb0
     //https://community.khronos.org/t/loading-a-bitmap-image-to-use-it-as-a-texture-background-on-canvas-for-drawing/72323
 
+
 };
+
 class tree{//TODO create tree draw function
 public:
     //notes drawing a cone manually is gonna be hard or impossible i tried with the cylinder
@@ -180,6 +239,11 @@ void display (void)
     //glRotated(x,1,1,0);
 	//Your code is written here
     fPerson::drawLeftArm();//replace this with the draw function you want to test
+    //Drawing the zombie
+    zombie::drawhead();
+    zombie::Body();
+    zombie::leftLeg();
+    zombie::rightLeg();
     //x+=0.1;
     glutSwapBuffers();
 }
@@ -237,15 +301,15 @@ int main (int argc, char **argv)
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE); // buffer mode
     glutInitWindowSize     (800, 700);
     glutInitWindowPosition (700, 200);
-    glutCreateWindow       ("Sphere Rotating Animation");
+    glutCreateWindow       ("Zombie vs Player");
 
     glClearColor (1.0, 1.0, 1.0, 0.0);
 
     glutDisplayFunc (display);
     glutReshapeFunc (reshapeFunc);
     glutIdleFunc    (idleFunc);
-
     glClearColor(1,1,1,1);
+    glutKeyboardFunc(keyboard);
     texture(); // Lighting and textures
 
 
