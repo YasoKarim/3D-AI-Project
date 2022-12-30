@@ -103,9 +103,9 @@ public:
         //glTranslated(0,0.5,-18.5);
 
         glTranslated(0,-0.5,18.5);
-        glPushMatrix();
+        //glPushMatrix();
         //glTranslated(0,0.5,-18.5);
-        glRotated(90,0,1,0);
+        //glRotated(0,0,1,0);
         //glTranslated(0,-0.5,18.5);
         //gun handle
         glPushMatrix();
@@ -118,11 +118,11 @@ public:
         //gun barrel
         glPushMatrix();
         glColor3f(0.2,0.2,0.2);
-        glTranslated(0,0.2,-0.5);
+        glTranslated(0,0.2,-0.6);
         glRotated(90,-1,0,0);
-        basicShapes::cuboid(0.05,0.05,0.15);
+        basicShapes::cuboid(0.05,0.05,0.25);
         glPopMatrix();
-        glPopMatrix();
+        //glPopMatrix();
         glPopMatrix();
 
 
@@ -165,7 +165,7 @@ void reshapeFunc (int w, int h)
     glViewport(0,0,(GLsizei)w,(GLsizei)h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective (45.0, (GLdouble)w / (GLdouble)h, 0.5, 100.0);
+    gluPerspective (60.0, (GLdouble)w / (GLdouble)h, 0.5, 100.0);
     glMatrixMode(GL_MODELVIEW);
 }
 
