@@ -73,13 +73,59 @@ public:
     static void drawLeftArm()
     {
         glPushMatrix();
+        glTranslated(0,-0.5,18.5);
+        //left arm
+        glPushMatrix();
         glColor3f(0,0.9,0);
 
+        glTranslated(-0.3,0,0);
         glRotated(80,-1,0,0);
-        glRotated(30,0,0,-1);
-        glTranslated(7.5,-15,2);
-        basicShapes::cuboid(0.2,0.2,0.6);
+        glRotated(20,0,0,-1);
+
+        basicShapes::cuboid(0.125,0.125,0.6);
         glPopMatrix();
+
+        //right arm
+        glPushMatrix();
+        glColor3f(0,0.6,0);
+
+        glTranslated(0.3,0,0);
+        glRotated(80,-1,0,0);
+        glRotated(20,0,0,1);
+
+        basicShapes::cuboid(0.125,0.125,0.6);
+        glPopMatrix();
+
+        glPopMatrix();
+
+
+        glPushMatrix();
+        //glTranslated(0,0.5,-18.5);
+
+        glTranslated(0,-0.5,18.5);
+        glPushMatrix();
+        //glTranslated(0,0.5,-18.5);
+        glRotated(90,0,1,0);
+        //glTranslated(0,-0.5,18.5);
+        //gun handle
+        glPushMatrix();
+        glColor3f(0.2,0.2,0.2);
+        glTranslated(0,0,-0.5);
+        glRotated(5,-1,0,0);
+        basicShapes::cuboid(0.05,0.05,0.15);
+        glPopMatrix();
+
+        //gun barrel
+        glPushMatrix();
+        glColor3f(0.2,0.2,0.2);
+        glTranslated(0,0.2,-0.5);
+        glRotated(90,-1,0,0);
+        basicShapes::cuboid(0.05,0.05,0.15);
+        glPopMatrix();
+        glPopMatrix();
+        glPopMatrix();
+
+
     }
 
 
