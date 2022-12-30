@@ -65,6 +65,41 @@ public:
 
         glPopMatrix();
     }
+    static void pyramids(double baselength=1.0, double basewidth=1.0, double pyheight=1.0){
+     glPushMatrix();
+     glScaled(baselength,basewidth,pyheight);
+
+      //front
+      glBegin(GL_TRIANGLES);
+      glVertex3f( 0, 2, 0);
+      glVertex3f(-2, -2, 1);
+      glVertex3f(2, -2, 1);
+      glEnd();
+
+      // Right
+      glBegin(GL_TRIANGLES);
+      glVertex3f(0, 2, 0);
+      glVertex3f(2, -2, 1);
+      glVertex3f(1.5, -2, -1);
+      glEnd();
+
+      //left
+      glBegin(GL_TRIANGLES);
+      glColor3f(0,0.5,0.1);
+      glVertex3f(0, 2, 0);
+      glVertex3f(-2.5, -2, -1);
+      glVertex3f(-2, -2, 1);
+      glEnd();
+
+      //back
+      glBegin(GL_TRIANGLES);
+      glVertex3f(0, 2, 0);
+      glVertex3f(-2.5, -2, -1);
+      glVertex3f(-2, -2, 1);
+      glEnd();
+
+      glPopMatrix();
+      }
 public:
     static void sphere(int radius)
     {
@@ -266,6 +301,34 @@ public:
     //code the pyramid inside basicShapes class in a separate function
 
     ////nice to do's same as the above
+    static void drawtreestem(){
+      glPushMatrix();
+      glColor3f(0.4,0.2,0);
+      glTranslatef(10,-3,0);
+      basicShapes::cuboid(0.3,0.5,0.5);
+      glPopMatrix();
+   }
+   static void drawfirstlayer(){
+      glPushMatrix();
+      glColor3f(0,0.6,0 );
+      glTranslatef(10,-1.5,0);
+      basicShapes::pyramids(1.0,0.5,1.0);
+      glPopMatrix();
+   }
+  static void drawsecondlayer(){
+      glPushMatrix();
+      glColor3f(0,0.6,0 );
+      glTranslatef(10,-0.9,0);
+      basicShapes::pyramids(1.0,0.5,1.0);
+      glPopMatrix();
+   }
+   static void drawthirdlayer(){
+      glPushMatrix();
+      glColor3f(0,0.6,0 );
+      glTranslatef(10,0.3,0);
+      basicShapes::pyramids(0.9,0.8,0.8);
+      glPopMatrix();
+   }
 };
 float xRotated = 90.0, yRotated = 0.0, zRotated = 0.0;
 float x=0;
@@ -291,7 +354,10 @@ void display (void)
     //glRotated(x,1,1,0);
 	//Your code is written here
     fPerson::drawLeftArm();//replace this with the draw function you want to test
-
+    tree::drawtreestem();
+    tree::drawfirstlayer();
+    tree::drawsecondlayer();
+    tree::drawthirdlayer();
     glPushMatrix();
     //calculate position
     if(left==true)  movX+=0.1;
