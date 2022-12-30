@@ -66,15 +66,53 @@ public:
         glPopMatrix();
     }
 };
+
+bool right=false,left=false,forw=false,backw=false;
+double movX=0,movZ=0;
+
 //Key usage to Esc or Fullscreen
 void keyboard(unsigned char key,int x,int y)
 {
-   if(key == 27)
-    exit(0);
-   if(key == 'f')
-    glutFullScreen();
-}
+    if(key == 27)
+        exit(0);
+    else if(key == 'f')
+        glutFullScreen();
 
+
+
+
+
+
+
+
+    if(key=='w'){
+        forw=true;
+    }
+    else if(key == 's'){
+        backw=true;
+    }
+    else if(key == 'd'){
+        right=true;
+    }
+    else if(key == 'a'){
+        left=true;
+    }
+}
+void keyboardUp(unsigned char key,int x,int y){
+
+    if(key=='w'){
+        forw=false;
+    }
+    else if(key == 's'){
+        backw=false;
+    }
+    else if(key == 'd'){
+        right=false;
+    }
+    else if(key == 'a'){
+        left=false;
+    }
+}
 
 class fPerson{//TODO create first person shooter with shooting animation
 public:
@@ -145,6 +183,14 @@ class zombie
 //TODO create zombie draw function
 public:
     //int speed;
+
+    static void drawZ(){
+        zombie::drawhead();
+        zombie::Body();
+        zombie::leftLeg();
+        zombie::rightLeg();
+    }
+
     //Drawing head
     static void drawhead()
     {
@@ -239,12 +285,20 @@ void display (void)
     //glRotated(x,1,1,0);
 	//Your code is written here
     fPerson::drawLeftArm();//replace this with the draw function you want to test
+
+    glPushMatrix();
+    //calculate position
+    if(left==true)movX+=0.1;
+    if(right==true) movX-=0.1;
+    if(forw==true) movZ+=0.1;
+    if(backw==true) movZ-=0.1;
+
+    glTranslatef    (movX, 0.0, movZ);
     //Drawing the zombie
-    zombie::drawhead();
-    zombie::Body();
-    zombie::leftLeg();
-    zombie::rightLeg();
-    //x+=0.1;
+    zombie::drawZ();
+
+
+    glPopMatrix();
     glutSwapBuffers();
 }
 
@@ -310,6 +364,7 @@ int main (int argc, char **argv)
     glutIdleFunc    (idleFunc);
     glClearColor(1,1,1,1);
     glutKeyboardFunc(keyboard);
+    glutKeyboardUpFunc(keyboardUp);
     texture(); // Lighting and textures
 
 
