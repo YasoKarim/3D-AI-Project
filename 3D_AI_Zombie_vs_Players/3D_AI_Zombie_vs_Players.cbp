@@ -32,7 +32,7 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add directory="D:/Programs/CodeBlocks_Old/CodeBlocks/MinGW/include" />
+			<Add directory="D:/PPPPrograms/CodeBlocks_Old/CodeBlocks/MinGW/include" />
 		</Compiler>
 		<Linker>
 			<Add library="freeglut" />
