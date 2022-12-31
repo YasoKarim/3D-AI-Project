@@ -100,11 +100,14 @@ public:
 
       glPopMatrix();
       }
-public:
-    static void sphere(int radius)
-    {
+      static void shperes(double radius = 1.0)
+      {
+       glPushMatrix ();
+       glScaled(radius,1,1);
+       glutSolidSphere (1.0, 5, 30);
+       glPopMatrix ();
 
-    }
+      }
 };
 
 bool right=false,left=false,forw=false,backw=false;
@@ -131,6 +134,7 @@ void keyboard(unsigned char key,int x,int y)
         left=true;
     }
 }
+// Unclicked keys
 void keyboardUp(unsigned char key,int x,int y){
 
     if(key=='w'){
@@ -269,8 +273,8 @@ public:
         glPushMatrix();
         glColor3f(0,0.5,0);
         //glTranslated(0.5,-3.7,2.9);
-       glTranslated(0.5,-3.7,0);
-       glRotated(45,0,1,0);
+        glTranslated(0.5,-3.7,0);
+        glRotated(45,0,1,0);
         //basicShapes::cuboid(0.4,0.2,0.5);
         basicShapes::cuboid(0.2,0.4,0.5);
         glPopMatrix();
@@ -290,8 +294,13 @@ public:
 
 
 };
+//To draw zombie snowman
 class zombieSnowMan{
 public:
+    static void drawSnowMan()
+    {
+        basicShapes::shperes(1);
+    }
 };
 
 class tree{//TODO create tree draw function
@@ -299,15 +308,23 @@ public:
     //notes drawing a cone manually is gonna be hard or impossible i tried with the cylinder
     //construct the tree out of pyramids instead
     //code the pyramid inside basicShapes class in a separate function
+    static void drawtree()
+    {
+        tree::drawtreestem();
+        tree::drawfirstlayer();
+        tree::drawsecondlayer();
+        tree::drawthirdlayer();
 
-    ////nice to do's same as the above
-    static void drawtreestem(){
+    }
+    ////nice to do's same as thcaan;t talk e above
+    static void drawtreestem()
+    {
       glPushMatrix();
       glColor3f(0.4,0.2,0);
       glTranslatef(10,-3,0);
       basicShapes::cuboid(0.3,0.5,0.5);
       glPopMatrix();
-   }
+    }
    static void drawfirstlayer(){
       glPushMatrix();
       glColor3f(0,0.6,0 );
@@ -349,17 +366,14 @@ void display (void)
 {
 
     glClear        (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-glClearColor(100.0/255.0,128.0/255.0,122.0/255.0,0.0);
+    glClearColor(100.0/255.0,128.0/255.0,122.0/255.0,0.0);
     //glClearColor(130,128,122);
     glLoadIdentity ();
     glTranslatef    (0.0, 0.0, -20.0);
     //glRotated(x,1,1,0);
 	//Your code is written here
     fPerson::drawLeftArm();//replace this with the draw function you want to test
-    tree::drawtreestem();
-    tree::drawfirstlayer();
-    tree::drawsecondlayer();
-    tree::drawthirdlayer();
+
     glPushMatrix();
     //calculate position
     if(left==true)  movX+=0.1;
@@ -370,8 +384,8 @@ glClearColor(100.0/255.0,128.0/255.0,122.0/255.0,0.0);
     glTranslatef    (movX, 0.0, movZ);
     //Drawing the zombie
     zombie::drawZ();
-
-
+    //zombieSnowMan::drawSnowMan(2);
+    tree::drawtree();
     glPopMatrix();
     glutSwapBuffers();
 }
@@ -444,3 +458,7 @@ int main (int argc, char **argv)
 
     glutMainLoop();
 }
+/* tree::drawtreestem();
+    tree::drawfirstlayer();
+    tree::drawsecondlayer();
+    tree::drawthirdlayer();*/
