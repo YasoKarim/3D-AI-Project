@@ -94,8 +94,9 @@ public:
       //back
       glBegin(GL_TRIANGLES);
       glVertex3f(0, 2, 0);
-      glVertex3f(-2.5, -2, -1);
       glVertex3f(-2, -2, 1);
+      glVertex3f(-2.5, -2, -1);
+
       glEnd();
 
       glPopMatrix();
@@ -358,6 +359,7 @@ void display (void)
     tree::drawfirstlayer();
     tree::drawsecondlayer();
     tree::drawthirdlayer();
+
     glPushMatrix();
     //calculate position
     if(left==true)  movX+=0.1;
