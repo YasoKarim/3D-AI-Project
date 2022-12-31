@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <windows.h>
 #include <math.h>
+#include <stdio.h>
 //IMPORTANT polygons MUST be drawn counter-clockwise
 //design using https://technology.cpm.org/general/3dgraph/
 void keyboard(unsigned char key,int x,int y);
@@ -65,6 +66,41 @@ public:
 
         glPopMatrix();
     }
+    static void pyramids(double baselength=1.0, double basewidth=1.0, double pyheight=1.0){
+     glPushMatrix();
+     glScaled(baselength,basewidth,pyheight);
+
+      //front
+      glBegin(GL_TRIANGLES);
+      glVertex3f( 0, 2, 0);
+      glVertex3f(-2, -2, 1);
+      glVertex3f(2, -2, 1);
+      glEnd();
+
+      // Right
+      glBegin(GL_TRIANGLES);
+      glVertex3f(0, 2, 0);
+      glVertex3f(2, -2, 1);
+      glVertex3f(1.5, -2, -1);
+      glEnd();
+
+      //left
+      glBegin(GL_TRIANGLES);
+      glColor3f(0,0.5,0.1);
+      glVertex3f(0, 2, 0);
+      glVertex3f(-2.5, -2, -1);
+      glVertex3f(-2, -2, 1);
+      glEnd();
+
+      //back
+      glBegin(GL_TRIANGLES);
+      glVertex3f(0, 2, 0);
+      glVertex3f(-2.5, -2, -1);
+      glVertex3f(-2, -2, 1);
+      glEnd();
+
+      glPopMatrix();
+      }
 public:
     static void sphere(int radius)
     {
@@ -72,10 +108,24 @@ public:
     }
 };
 
-bool right=false,left=false,forw=false,backw=false;
-double movX=0,movZ=0;
+bool right=false,left=false,forw=false,backw=false,rotR=false,rotL=false;
+double movX=0,movZ=0,rotAngle=0;
 
 //Key usage to Esc or Fullscreen
+
+void specialKey(int key,int x,int y){
+
+    if(key == GLUT_KEY_LEFT)rotL=true;
+    if(key == GLUT_KEY_RIGHT)rotR=true;
+
+}
+
+void specialKeyUp(int key,int x,int y){
+    if(key == GLUT_KEY_LEFT)rotL=false;
+    if(key == GLUT_KEY_RIGHT)rotR=false;
+}
+
+
 void keyboard(unsigned char key,int x,int y)
 {
     if(key == 27)
@@ -95,6 +145,15 @@ void keyboard(unsigned char key,int x,int y)
     else if(key == 'a'){
         left=true;
     }
+
+
+
+    //if(key==GLUT_KEY_LEFT){
+
+    //}
+    //else if(key==GLUT_KEY_RIGHT){
+
+   // }
 }
 void keyboardUp(unsigned char key,int x,int y){
 
@@ -110,16 +169,19 @@ void keyboardUp(unsigned char key,int x,int y){
     else if(key == 'a'){
         left=false;
     }
+
+
 }
 
-class fPerson{//TODO create first person shooter with shooting animation
+class fPerson
+{//TODO create first person shooter with shooting animation
 public:
     int direction;
     static void drawLeftArm()
     {
 
         glPushMatrix();
-        glTranslated(0,-0.5,18.5);
+        glTranslated(0,-0.5,-1.5);
         //left arm
         glPushMatrix();
         glColor3f(0,0.9,0);
@@ -148,7 +210,7 @@ public:
         glPushMatrix();
         //glTranslated(0,0.5,-18.5);
 
-        glTranslated(0,-0.5,18.5);
+        glTranslated(0,-0.5,-1.5);
         //glPushMatrix();
         //glTranslated(0,0.5,-18.5);
         //glRotated(0,0,1,0);
@@ -185,6 +247,7 @@ public:
 
     static void drawZ()
     {
+        glTranslated(0,0,-20);
         zombie::drawhead();
         zombie::Body();
         zombie::leftLeg();
@@ -222,7 +285,7 @@ public:
         glTranslated(-0.2,-3.7,0);
         glRotated(45,0,1,0);
 //      basicShapes::cuboid(0.4,0.2,0.4);
-        basicShapes::cuboid(0.3,0.2,0.5);
+        basicShapes::cuboid(0.2,0.4,0.5);
         glPopMatrix();
 
     }
@@ -234,10 +297,10 @@ public:
         glPushMatrix();
         glColor3f(0,0.5,0);
         //glTranslated(0.5,-3.7,2.9);
-        glTranslated(0.5,-3.7,0);
-        glRotated(45,0,1,0);
+       glTranslated(0.5,-3.7,0);
+       glRotated(45,0,1,0);
         //basicShapes::cuboid(0.4,0.2,0.5);
-        basicShapes::cuboid(0.3,0.2,0.5);
+        basicShapes::cuboid(0.2,0.4,0.5);
         glPopMatrix();
 
     }
@@ -266,6 +329,43 @@ public:
     //code the pyramid inside basicShapes class in a separate function
 
     ////nice to do's same as the above
+
+    static void drawTree(){
+        glTranslated(0,0,-20);
+        tree::drawtreestem();
+        tree::drawfirstlayer();
+        tree::drawsecondlayer();
+        tree::drawthirdlayer();
+    }
+
+    static void drawtreestem(){
+      glPushMatrix();
+      glColor3f(0.4,0.2,0);
+      glTranslatef(10,-3,0);
+      basicShapes::cuboid(0.3,0.5,0.5);
+      glPopMatrix();
+   }
+   static void drawfirstlayer(){
+      glPushMatrix();
+      glColor3f(0,0.6,0 );
+      glTranslatef(10,-1.5,0);
+      basicShapes::pyramids(1.0,0.5,1.0);
+      glPopMatrix();
+   }
+  static void drawsecondlayer(){
+      glPushMatrix();
+      glColor3f(0,0.6,0 );
+      glTranslatef(10,-0.9,0);
+      basicShapes::pyramids(1.0,0.5,1.0);
+      glPopMatrix();
+   }
+   static void drawthirdlayer(){
+      glPushMatrix();
+      glColor3f(0,0.6,0 );
+      glTranslatef(10,0.3,0);
+      basicShapes::pyramids(0.9,0.8,0.8);
+      glPopMatrix();
+   }
 };
 float xRotated = 90.0, yRotated = 0.0, zRotated = 0.0;
 float x=0;
@@ -281,28 +381,47 @@ void reshapeFunc (int w, int h)
 }
 
 //------------------------------  display   -------------------------------
-
+double accm=0.01;
 void display (void)
 {
 
+
     glClear        (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(100.0/255.0,128.0/255.0,122.0/255.0,0.0);
+    //glClearColor(130,128,122);
     glLoadIdentity ();
-    glTranslatef    (0.0, 0.0, -20.0);
+    //glTranslatef    (0.0, 0.0, -20.0);
     //glRotated(x,1,1,0);
 	//Your code is written here
     fPerson::drawLeftArm();//replace this with the draw function you want to test
 
     glPushMatrix();
+    if(rotL==true) rotAngle-=0.2;
+    if(rotR==true) rotAngle+=0.2;
+    glRotated(rotAngle,0,1,0);
     //calculate position
-    if(left==true)  movX+=0.1;
-    if(right==true) movX-=0.1;
-    if(forw==true)  movZ+=0.1;
-    if(backw==true) movZ-=0.1;
+    //if(left==true)  movX+=0.1*cos(rotAngle+90);
+    //if(right==true) movX-=0.1*cos(rotAngle+90);
+    if(forw==true){
+        //accm+=0.01;
+        movZ+=0.01*sin((rotAngle+90)*3.14/180);
+        movX+=0.01*cos((rotAngle+90)*3.14/180);
 
+    }
+    //if(backw==true) movZ-=0.1*sin(rotAngle+90);
+
+   // glRotated(-rotAngle,0,1,0);
+   ;
+    //glRotated(rotAngle,0,1,0);
+
+    printf("%0.2f\n",rotAngle);
     glTranslatef    (movX, 0.0, movZ);
+    //glTranslatef    (-movX, 0.0,-movZ );
+
+    //glTranslatef    (movX, 0.0,movZ );
     //Drawing the zombie
     zombie::drawZ();
-
+    tree::drawTree();
 
     glPopMatrix();
     glutSwapBuffers();
@@ -371,6 +490,8 @@ int main (int argc, char **argv)
     glClearColor(1,1,1,1);
     glutKeyboardFunc(keyboard);
     glutKeyboardUpFunc(keyboardUp);
+    glutSpecialFunc(specialKey);
+    glutSpecialUpFunc(specialKeyUp);
     texture(); // Lighting and textures
 
 

@@ -1,11 +1,12 @@
 # depslib dependency file v1.0
-1672437025 source:d:\githubreps\3d-ai-project\3d_ai_zombie_vs_players\main.cpp
+1672519866 source:d:\githubreps\3d-ai-project\3d_ai_zombie_vs_players\main.cpp
 	<GL/gl.h>
 	<GL/glu.h>
 	<GL/glut.h>
 	<stdlib.h>
 	<windows.h>
 	<math.h>
+	<stdio.h>
 
 1301111164 d:\programs\codeblocks_old\codeblocks\mingw\include\gl\gl.h
 
@@ -233,4 +234,14 @@
 
 1341006774 d:\programs\codeblocks_old\codeblocks\mingw\include\math.h
 	<_mingw.h>
+
+1341006776 d:\programs\codeblocks_old\codeblocks\mingw\include\stdio.h
+	<_mingw.h>
+	<stddef.h>
+	<stdarg.h>
+	<sys/types.h>
+
+1341006780 d:\programs\codeblocks_old\codeblocks\mingw\include\sys\types.h
+	<_mingw.h>
+	<stddef.h>
 
