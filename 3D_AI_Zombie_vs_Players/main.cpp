@@ -222,7 +222,7 @@ public:
         glTranslated(-0.2,-3.7,0);
         glRotated(45,0,1,0);
 //      basicShapes::cuboid(0.4,0.2,0.4);
-        basicShapes::cuboid(0.3,0.2,0.5);
+        basicShapes::cuboid(0.2,0.4,0.5);
         glPopMatrix();
 
     }
@@ -234,10 +234,10 @@ public:
         glPushMatrix();
         glColor3f(0,0.5,0);
         //glTranslated(0.5,-3.7,2.9);
-        glTranslated(0.5,-3.7,0);
-        glRotated(45,0,1,0);
+       glTranslated(0.5,-3.7,0);
+       glRotated(45,0,1,0);
         //basicShapes::cuboid(0.4,0.2,0.5);
-        basicShapes::cuboid(0.3,0.2,0.5);
+        basicShapes::cuboid(0.2,0.4,0.5);
         glPopMatrix();
 
     }
@@ -286,6 +286,8 @@ void display (void)
 {
 
     glClear        (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+glClearColor(100.0/255.0,128.0/255.0,122.0/255.0,0.0);
+    //glClearColor(130,128,122);
     glLoadIdentity ();
     glTranslatef    (0.0, 0.0, -20.0);
     //glRotated(x,1,1,0);
