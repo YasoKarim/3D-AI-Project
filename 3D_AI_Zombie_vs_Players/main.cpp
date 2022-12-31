@@ -101,15 +101,18 @@ public:
 
       glPopMatrix();
       }
-public:
-    static void sphere(int radius)
-    {
+      static void shperes(double radius = 1.0)
+      {
+       glPushMatrix ();
+       glScaled(radius,1,1);
+       glutSolidSphere (1.0, 5, 30);
+       glPopMatrix ();
 
-    }
+      }
 };
 
 bool right=false,left=false,forw=false,backw=false,rotR=false,rotL=false;
-double movX=0,movZ=0,rotAngle=0;
+double movX=0,movZ=0,rotAngle=0,rotangleZombie =0;
 
 //Key usage to Esc or Fullscreen
 
@@ -155,6 +158,7 @@ void keyboard(unsigned char key,int x,int y)
 
    // }
 }
+// Unclicked keys
 void keyboardUp(unsigned char key,int x,int y){
 
     if(key=='w'){
@@ -247,11 +251,18 @@ public:
 
     static void drawZ()
     {
-        glTranslated(0,0,-20);
+        glPushMatrix();
+        printf("Movx: %0.2f \t MovZ: %0.2f \t userAngle:%0.2f \t",movX,movZ,rotAngle);
+        rotangleZombie = atan( (movX-0) / ( movZ+20 )) * (180 / 3.14);
+        printf("%0.2f\n",rotangleZombie);
+
+        glTranslated(0,0,20);
+        glRotated(rotangleZombie,0,1,0);
         zombie::drawhead();
         zombie::Body();
         zombie::leftLeg();
         zombie::rightLeg();
+        glPopMatrix();
     }
 
     //Drawing head
@@ -260,8 +271,11 @@ public:
         glPushMatrix();
         glColor3f(0,0.7,0);
         glTranslated(0,0.1,0);
-        glRotated(45,0,1,0);
+        //glRotated(45,0,1,0);
         basicShapes::cuboid(0.7,0.7,0.7);
+        glColor3f(1.0,0.0,0.0);
+        glTranslated(0,0,1);
+        basicShapes::cuboid(0.2,0.2,0.2);
         glPopMatrix();
 
     }
@@ -270,9 +284,11 @@ public:
     {
         glPushMatrix();
         glColor3f(0,0.9,0);
-        glTranslated(0,-2.0,0);
-        glRotated(45,0,1,0);
-        basicShapes::cuboid(0.5,1.2,1.1);
+
+        glTranslated(0,-2.2,0);
+        //glRotated(45,0,1,0);
+        basicShapes::cuboid(0.5,1.2,1.5);
+
         glPopMatrix();
     }
 
@@ -283,7 +299,7 @@ public:
         glPushMatrix();
         glColor3f(0,0.5,0);
         glTranslated(-0.2,-3.7,0);
-        glRotated(45,0,1,0);
+        //glRotated(45,0,1,0);
 //      basicShapes::cuboid(0.4,0.2,0.4);
         basicShapes::cuboid(0.2,0.4,0.5);
         glPopMatrix();
@@ -297,8 +313,8 @@ public:
         glPushMatrix();
         glColor3f(0,0.5,0);
         //glTranslated(0.5,-3.7,2.9);
-       glTranslated(0.5,-3.7,0);
-       glRotated(45,0,1,0);
+        glTranslated(0.2,-3.7,0);
+       // glRotated(45,0,1,0);
         //basicShapes::cuboid(0.4,0.2,0.5);
         basicShapes::cuboid(0.2,0.4,0.5);
         glPopMatrix();
@@ -318,8 +334,13 @@ public:
 
 
 };
+//To draw zombie snowman
 class zombieSnowMan{
 public:
+    static void drawSnowMan()
+    {
+        basicShapes::shperes(1);
+    }
 };
 
 class tree{//TODO create tree draw function
@@ -327,6 +348,13 @@ public:
     //notes drawing a cone manually is gonna be hard or impossible i tried with the cylinder
     //construct the tree out of pyramids instead
     //code the pyramid inside basicShapes class in a separate function
+    static void drawtree()
+    {
+        tree::drawtreestem();
+        tree::drawfirstlayer();
+        tree::drawsecondlayer();
+        tree::drawthirdlayer();
+    }
 
     ////nice to do's same as the above
 
@@ -344,7 +372,7 @@ public:
       glTranslatef(10,-3,0);
       basicShapes::cuboid(0.3,0.5,0.5);
       glPopMatrix();
-   }
+    }
    static void drawfirstlayer(){
       glPushMatrix();
       glColor3f(0,0.6,0 );
@@ -394,35 +422,45 @@ void display (void)
     //glRotated(x,1,1,0);
 	//Your code is written here
     fPerson::drawLeftArm();//replace this with the draw function you want to test
-
     glPushMatrix();
     if(rotL==true) rotAngle-=0.2;
     if(rotR==true) rotAngle+=0.2;
     glRotated(rotAngle,0,1,0);
     //calculate position
-    //if(left==true)  movX+=0.1*cos(rotAngle+90);
-    //if(right==true) movX-=0.1*cos(rotAngle+90);
+    if(left==true){
+        movZ+=0.02*sin((rotAngle+180)*3.14/180);
+        movX+=0.02*cos((rotAngle+180)*3.14/180);
+    }
+    if(right==true)
+    {
+        movZ+=0.02*sin((rotAngle)*3.14/180);
+        movX+=0.02*cos((rotAngle)*3.14/180);
+    }
     if(forw==true){
         //accm+=0.01;
-        movZ+=0.01*sin((rotAngle+90)*3.14/180);
-        movX+=0.01*cos((rotAngle+90)*3.14/180);
+        movZ+=0.02*sin((rotAngle+90)*3.14/180);
+        movX+=0.02*cos((rotAngle+90)*3.14/180);
 
     }
-    //if(backw==true) movZ-=0.1*sin(rotAngle+90);
-
+   /* if(backw==true)
+    {
+    //movZ-=0.1*sin(rotAngle+90);
+    movZ+=0.01*sin((rotAngle+270)*3.14/180);
+    movX+=0.01*cos((rotAngle+270)*3.14/180);}
+*/
    // glRotated(-rotAngle,0,1,0);
    ;
     //glRotated(rotAngle,0,1,0);
 
-    printf("%0.2f\n",rotAngle);
+    //printf("%0.2f\n",rotAngle);
     glTranslatef    (movX, 0.0, movZ);
     //glTranslatef    (-movX, 0.0,-movZ );
 
     //glTranslatef    (movX, 0.0,movZ );
     //Drawing the zombie
     zombie::drawZ();
-    tree::drawTree();
 
+    tree::drawTree();
     glPopMatrix();
     glutSwapBuffers();
 }
@@ -497,3 +535,7 @@ int main (int argc, char **argv)
 
     glutMainLoop();
 }
+/* tree::drawtreestem();
+    tree::drawfirstlayer();
+    tree::drawsecondlayer();
+    tree::drawthirdlayer();*/
