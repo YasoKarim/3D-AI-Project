@@ -270,9 +270,9 @@ public:
     {
         glPushMatrix();
         glColor3f(0,0.9,0);
-        glTranslated(0,-2.2,0);
+        glTranslated(0,-2.0,0);
         glRotated(45,0,1,0);
-        basicShapes::cuboid(0.5,1.2,1.5);
+        basicShapes::cuboid(0.5,1.2,1.1);
         glPopMatrix();
     }
 
