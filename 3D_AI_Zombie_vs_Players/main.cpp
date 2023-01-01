@@ -156,7 +156,7 @@ void keyboard(unsigned char key,int x,int y)
      if(key == ' ')
      {
        flag = 1;
-       printf("Shoot\n");
+       //printf("Shoot\n");
      }
 
 //-----> ''
@@ -282,11 +282,11 @@ double zX,zZ,health =100;
 
     if(detectAngle<0)detectAngle+=360;
     if(-rotAngle<0)rotAngle-=360;
-     printf("%0.2f ------------ %0.2f----------%0.2f ------------%0.2f ",detectAngle,-rotAngle,movX,movZ);
-     if(detectAngle - 20 <= -rotAngle  && detectAngle + 20 >= -rotAngle){
-        printf("Shooting");
+     //printf("%0.2f ------------ %0.2f----------%0.2f ------------%0.2f\n ",detectAngle,-rotAngle,movX,movZ);
+     if(detectAngle - 4 <= -rotAngle  && detectAngle + 4 >= -rotAngle){
+        printf("Shooting\n");
      }
-    flag = 0;
+
     }
 
     void drawZ()
@@ -549,7 +549,7 @@ void display (void)
         //printf("jkadssadahds");
         tObj[i]->drawTree();
     }
- if(tObjZ.size() <= 0)
+ if(tObjZ.size() <= 4)
     {
 
         double randx = rand() % 50 + 1;
@@ -557,8 +557,8 @@ void display (void)
        // double randx = rand() % 50 +1;
 
         //printf("\n%0.2f \t %0.2f \n",randx,randz);
-        //zombie * ZB = new zombie(randx,randz);
-        zombie * ZB = new zombie(0,-5);
+        zombie * ZB = new zombie(randx,randz);
+        //zombie * ZB = new zombie(23,40);
         tObjZ.push_back(ZB);
 
      }//printf("\here %d\n",tObj.size());
@@ -568,6 +568,7 @@ void display (void)
         //printf("jkadssadahds");
         tObjZ[i]->drawZ();
     }
+    flag = 0;
 
    // }
     xcurr = movX;
