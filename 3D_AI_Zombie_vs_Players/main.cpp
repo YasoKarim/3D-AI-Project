@@ -113,7 +113,7 @@ public:
 };
 
 bool right=false,left=false,forw=false,backw=false,rotR=false,rotL=false;
-double movX=0,movZ=0,rotAngle=0,rotangleZombie =0;
+double movX=0,movZ=0,rotAngle=0,rotangleZombie =0,Xzombi=0,Zzombi=20;
 
 //Key usage to Esc or Fullscreen
 
@@ -243,7 +243,6 @@ public:
 };
 
 //NOTICE nice to do's are super hard to accomplish don't waste time on those if you don't have it
-
 class zombie
 {
 //TODO create zombie draw function
@@ -253,11 +252,13 @@ public:
     static void drawZ()
     {
         glPushMatrix();
-        printf("Movx: %0.2f \t MovZ: %0.2f \t",movX,movZ);
-        rotangleZombie = tanh( (0 - movX) / (20 - movZ)) * 180 / 3.14;
+        printf("Movx: %0.2f \t MovZ: %0.2f \t userAngle:%0.2f \t",movX,movZ,rotAngle);
+        rotangleZombie = atan( (movX-Xzombi) / ( movZ+Zzombi )) * (180 / 3.14);
         printf("%0.2f\n",rotangleZombie);
-        glRotated(rotangleZombie,0,1,0);
         glTranslated(0,0,20);
+        glRotated(rotangleZombie,0,1,0);
+
+
         zombie::drawhead();
         zombie::Body();
         zombie::leftLeg();
@@ -284,9 +285,11 @@ public:
     {
         glPushMatrix();
         glColor3f(0,0.9,0);
+
         glTranslated(0,-2.2,0);
         //glRotated(45,0,1,0);
         basicShapes::cuboid(0.5,1.2,1.5);
+
         glPopMatrix();
     }
 
@@ -311,7 +314,7 @@ public:
         glPushMatrix();
         glColor3f(0,0.5,0);
         //glTranslated(0.5,-3.7,2.9);
-        glTranslated(0.5,-3.7,0);
+        glTranslated(0.2,-3.7,0);
        // glRotated(45,0,1,0);
         //basicShapes::cuboid(0.4,0.2,0.5);
         basicShapes::cuboid(0.2,0.4,0.5);
@@ -431,9 +434,13 @@ void display (void)
     if(rotR==true) rotAngle+=0.2;
     glRotated(rotAngle,0,1,0);
     //calculate position
-    //if(left==true)  movX+=0.1*cos(rotAngle+90);
+    if(left==true){
+        movZ+=0.02*sin((rotAngle+180)*3.14/180);
+        movX+=0.02*cos((rotAngle+180)*3.14/180);
+    }
     if(right==true)
-    { movZ+=0.02*sin((rotAngle)*3.14/180);
+    {
+        movZ+=0.02*sin((rotAngle)*3.14/180);
         movX+=0.02*cos((rotAngle)*3.14/180);
     }
     if(forw==true){
