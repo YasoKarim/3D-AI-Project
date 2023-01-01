@@ -85,13 +85,12 @@ public:
       glVertex3f(1.5, -2, -1);
       glEnd();
 
-      //left
-      glBegin(GL_TRIANGLES);
-      glColor3f(0,0.5,0.1);
-      glVertex3f(0, 2, 0);
-      glVertex3f(-2.5, -2, -1);
-      glVertex3f(-2, -2, 1);
-      glEnd();
+     //left
+     glBegin(GL_TRIANGLES);
+     glVertex3f(0,2,0);
+     glVertex3f(-2.5,-2,-1);
+     glVertex3f(-2,-2,1);
+     glEnd();
 
       //back
       glBegin(GL_TRIANGLES);
@@ -126,6 +125,7 @@ public:
 
 bool right=false,left=false,forw=false,backw=false,rotR=false,rotL=false;
 double movX=0,movZ=0,rotAngle=0,rotangleZombie =0;
+int flag = 0;
 
 //Key usage to Esc or Fullscreen
 
@@ -141,29 +141,37 @@ void specialKeyUp(int key,int x,int y){
     if(key == GLUT_KEY_RIGHT)rotR=false;
 }
 
-
 void keyboard(unsigned char key,int x,int y)
 {
-    if(key == 27)
+     if(key == 27)
         exit(0);
-    else if(key == 'f')
+     if(key == 'f')
         glutFullScreen();
 
-    if(key=='w'){
+     if(key=='w')
+     {
         forw=true;
-    }
-    else if(key == 's'){
+     }
+     if(key == 's')
+     {
         backw=true;
-    }
-    else if(key == 'd'){
-        right=true;
-    }
-    else if(key == 'a'){
-        left=true;
-    }
+     }
+     if(key == 'd')
+     {
+       right=true;
+     }
+     if(key == 'a')
+     {
+       left=true;
+     }
+     if(key == ' ')
+     {
+       flag = 1;
+       //printf("Shoot\n");
+     }
 
-
-
+//-----> ''
+//if(z x )
     //if(key==GLUT_KEY_LEFT){
 
     //}
@@ -259,27 +267,54 @@ class zombie
 {
 //TODO create zombie draw function
 public:
-    //int speed;
-    static double zX,zZ,chase;
-    static void init(){
+double zX,zZ,health =100;
+    zombie(double x, double z)
+    {
+        this->zX = x;
+        this->zZ = z;
+    }
+   // static double chase;
+   /* static void init(){
     zombie::zX=10;
     zombie::zZ=-10;
     //zombie::zZ=0;
+    }*/
+    void detect()
+    {
+     if(flag == 0)
+        return;
+     //Angle we want to look at
+     double detectAngle = atan( ( movX - zX) / ( movZ - zZ )) * (180 / 3.14);
+     if(movZ<zZ){
+            detectAngle+=180;
+        }
+
+
+    if(detectAngle<0)detectAngle+=360;
+    if(-rotAngle<0)rotAngle-=360;
+     //printf("%0.2f ------------ %0.2f----------%0.2f ------------%0.2f\n ",detectAngle,-rotAngle,movX,movZ);
+     if(detectAngle - 4 <= -rotAngle  && detectAngle + 4 >= -rotAngle){
+        printf("Shooting\n");
+     }
+
     }
-    static void drawZ()
+
+    void drawZ()
     {
         glPushMatrix();
+
         //printf("\nMovx: %0.2f \t MovZ: %0.2f \t userAngle:%0.2f \t",movX,movZ,rotAngle);
-        rotangleZombie = atan( (movX-zX) / ( movZ-zZ )) * (180 / 3.14);
+        rotangleZombie = atan( (movX -zX) / ( movZ-zZ )) * (180 / 3.14);
+
         //printf("movZ: %0.2f \t movZ: %0.2f \t userAngle:%0.2f \t",movX,movZ,rotAngle);
         if(movZ>zZ){
             rotangleZombie+=180;
         }
 
-        zZ+=0.007*sin((rotAngle+90)*3.14/180);
-        zX+=0.007*cos((rotAngle+90)*3.14/180);
+        //zZ+=0.007*sin((rotAngle+90)*3.14/180);
+        //zX+=0.007*cos((rotAngle+90)*3.14/180);
         //chase+=0.01;
-        printf("%0.2f -- %0.2f\n",zX,zZ);
+        //printf("%0.2f -- %0.2f\n",zX,zZ);
         glTranslated(zX,0,zZ);
         //rotangleZombie = atan( (movX-zX) / ( movZ+zZ )) * (180 / 3.14);
         glRotated(rotangleZombie,0,1,0);
@@ -288,6 +323,7 @@ public:
         zombie::Body();
         zombie::leftLeg();
         zombie::rightLeg();
+        detect();
         glPopMatrix();
     }
 
@@ -396,7 +432,6 @@ public:
 
     ////nice to do's same as the above
 
-
     static void drawtree()
     {
         glPushMatrix();
@@ -409,6 +444,7 @@ public:
 
         glPopMatrix();
     }
+
 
 
     static void drawtreestem(){
@@ -464,14 +500,14 @@ void reshapeFunc (int w, int h)
 }
 
 //------------------------------  display   -------------------------------
-double zombie::zZ;
-double zombie::zX;
-double zombie::chase;
+//double zombie::zZ;
+//double zombie::zX;
+//double zombie::chase;
 double accm=0.01;
 
- int xcurr , zcurr ;
- std::vector <tree *> tObj;
-
+ int xcurr , zcurr ,xcurrZ,zcurrZ;
+std::vector <tree *> tObj;
+std::vector <zombie *> tObjZ;
 
 void display (void)
 {
@@ -493,6 +529,9 @@ void display (void)
     glPushMatrix();
     if(rotL==true) rotAngle-=0.2;
     if(rotR==true) rotAngle+=0.2;
+    if(rotAngle >= 360) rotAngle -= 360;
+    if(rotAngle <= -360) rotAngle += 360;
+
     glRotated(rotAngle,0,1,0);
     //calculate position
     if(left==true){
@@ -527,14 +566,17 @@ void display (void)
 
     //glTranslatef    (movX, 0.0,movZ );
     //Drawing the zombie
-    zombie::drawZ();
+
+    tree::drawtree();
+//    zombie::drawZ();
+
 
     //generating random trees
 
     //if(xcurr != movX && zcurr != movZ)
       //  {
-    if(tObj.size()<=20){
-    for(int i = 0;i < 3;i++)
+    if(tObj.size() <= 50){
+    for(int i = 0;i < 2;i++)
     {
         double randx = rand() % 50 + 1;
         double randz = rand() % 50 + 1;
@@ -549,6 +591,26 @@ void display (void)
         //printf("jkadssadahds");
         tObj[i]->drawTree();
     }
+ if(tObjZ.size() <= 4)
+    {
+
+        double randx = rand() % 50 + 1;
+        double randz = rand() % 50 + 1;
+       // double randx = rand() % 50 +1;
+
+        //printf("\n%0.2f \t %0.2f \n",randx,randz);
+        zombie * ZB = new zombie(randx,randz);
+        //zombie * ZB = new zombie(23,40);
+        tObjZ.push_back(ZB);
+
+     }//printf("\here %d\n",tObj.size());
+
+    for(int i =0 ; i < tObjZ.size(); i++)
+    {
+        //printf("jkadssadahds");
+        tObjZ[i]->drawZ();
+    }
+    flag = 0;
 
    // }
     xcurr = movX;
@@ -630,7 +692,7 @@ int main (int argc, char **argv)
     glutSpecialUpFunc(specialKeyUp);
     texture(); // Lighting and textures
 
-    zombie::init();
+//    zombie::init();
     glutMainLoop();
 }
 /* tree::drawtreestem();
