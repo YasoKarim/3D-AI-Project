@@ -252,25 +252,26 @@ public:
     //int speed;
     static double zX,zZ,chase;
     static void init(){
-    zombie::zX=0;
-    zombie::zZ=20;
-    zombie::zZ=0;
+    zombie::zX=10;
+    zombie::zZ=-10;
+    //zombie::zZ=0;
     }
     static void drawZ()
     {
         glPushMatrix();
-        //printf("Movx: %0.2f \t MovZ: %0.2f \t userAngle:%0.2f \t",movX,movZ,rotAngle);
-        rotangleZombie = atan( (movX-zX) / ( movZ+zZ )) * (180 / 3.14);
+        //printf("\nMovx: %0.2f \t MovZ: %0.2f \t userAngle:%0.2f \t",movX,movZ,rotAngle);
+        rotangleZombie = atan( (movX-zX) / ( movZ-zZ )) * (180 / 3.14);
         //printf("movZ: %0.2f \t movZ: %0.2f \t userAngle:%0.2f \t",movX,movZ,rotAngle);
-        if(-movZ<zZ){
+        if(movZ>zZ){
             rotangleZombie+=180;
         }
 
-        //zZ+=0.007*sin((rotAngle+90)*3.14/180);
-        //zX+=0.007*cos((rotAngle+90)*3.14/180);
+        zZ+=0.007*sin((rotAngle+90)*3.14/180);
+        zX+=0.007*cos((rotAngle+90)*3.14/180);
         //chase+=0.01;
+        printf("%0.2f -- %0.2f\n",zX,zZ);
         glTranslated(zX,0,zZ);
-        rotangleZombie = atan( (movX-zX) / ( movZ+zZ )) * (180 / 3.14);
+        //rotangleZombie = atan( (movX-zX) / ( movZ+zZ )) * (180 / 3.14);
         glRotated(rotangleZombie,0,1,0);
         //glTranslated(0,0,-chase);
         zombie::drawhead();
@@ -289,7 +290,7 @@ public:
         //glRotated(45,0,1,0);
         basicShapes::cuboid(0.7,0.7,0.7);
         glColor3f(1.0,0.0,0.0);
-        glTranslated(0,0,1);
+        glTranslated(0,0,-1);
         basicShapes::cuboid(0.2,0.2,0.2);
         glPopMatrix();
 
@@ -454,21 +455,21 @@ void display (void)
     glRotated(rotAngle,0,1,0);
     //calculate position
     if(left==true){
-        movZ+=0.02*sin((rotAngle)*3.14/180);
-        movX+=0.02*cos((rotAngle)*3.14/180);
-    }
-    if(right==true)
-    {
         movZ+=0.02*sin((rotAngle+180)*3.14/180);
         movX+=0.02*cos((rotAngle+180)*3.14/180);
     }
-    if(forw==true){
+    if(right==true)
+    {
+        movZ+=0.02*sin((rotAngle)*3.14/180);
+        movX+=0.02*cos((rotAngle)*3.14/180);
+    }
+    if(backw==true){
         //accm+=0.01;
         movZ+=0.02*sin((rotAngle+90)*3.14/180);
         movX+=0.02*cos((rotAngle+90)*3.14/180);
 
     }
-    if(backw==true)
+    if(forw==true)
     {
     //movZ-=0.1*sin(rotAngle+90);
         movZ+=0.01*sin((rotAngle+270)*3.14/180);
@@ -480,7 +481,7 @@ void display (void)
     //glRotated(rotAngle,0,1,0);
 
     //printf("%0.2f\n",rotAngle);
-    glTranslatef    (movX, 0.0, movZ);
+    glTranslatef    (-movX, 0.0, -movZ);
     //glTranslatef    (-movX, 0.0,-movZ );
 
     //glTranslatef    (movX, 0.0,movZ );
