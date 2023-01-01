@@ -288,8 +288,8 @@ double zX,zZ,health =100;
         //printf("\nMovx: %0.2f \t MovZ: %0.2f \t userAngle:%0.2f \t",movX,movZ,rotAngle);
         rotangleZombie = atan( (movX -zX) / ( movZ-zZ )) * (180 / 3.14);
         //printf("movZ: %0.2f \t movZ: %0.2f \t userAngle:%0.2f \t",movX,movZ,rotAngle);
-        if(movZ>zZ){
-            rotangleZombie+=180;
+        if(movZ > zZ){
+            rotangleZombie += 180;
         }
 
         //zZ+=0.007*sin((rotAngle+90)*3.14/180);
