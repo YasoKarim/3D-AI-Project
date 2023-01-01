@@ -248,14 +248,27 @@ class zombie
 //TODO create zombie draw function
 public:
     //int speed;
-
+    static double zX,zZ;
+    static void init(){
+    zombie::zX=0;
+    zombie::zZ=20;
+    }
     static void drawZ()
     {
         glPushMatrix();
-        printf("Movx: %0.2f \t MovZ: %0.2f \t userAngle:%0.2f \t",movX,movZ,rotAngle);
-        rotangleZombie = atan( (movX-Xzombi) / ( movZ+Zzombi )) * (180 / 3.14);
-        printf("%0.2f\n",rotangleZombie);
-        glTranslated(0,0,20);
+
+        //printf("Movx: %0.2f \t MovZ: %0.2f \t userAngle:%0.2f \t",movX,movZ,rotAngle);
+        rotangleZombie = atan( (movX-zX) / ( movZ+zZ )) * (180 / 3.14);
+        //printf("movZ: %0.2f \t movZ: %0.2f \t userAngle:%0.2f \t",movX,movZ,rotAngle);
+        if(-movZ<zZ){
+            rotangleZombie+=180;
+        }
+
+        zZ+=0.02*sin((rotAngle+90)*3.14/180);
+        zX+=0.02*cos((rotAngle+90)*3.14/180);
+
+        glTranslated(zX,0,zZ);
+
         glRotated(rotangleZombie,0,1,0);
          if(rotangleZombie==rotAngle){
         glRotated((rotangleZombie+270),0,1,0);
@@ -347,26 +360,45 @@ public:
 
 class tree{//TODO create tree draw function
 public:
+
+    double x,z;
     //notes drawing a cone manually is gonna be hard or impossible i tried with the cylinder
     //construct the tree out of pyramids instead
     //code the pyramid inside basicShapes class in a separate function
-    static void drawtree()
+    tree(double x, double z)
     {
+        this->x = x;
+        this->z = z;
+    }
+    void drawTree()
+    {
+        glPushMatrix();
+        //printf("\n----------->>%0.2f------%0.2f<<----------",x,z);
+        glTranslated(x,0,z);
+
         tree::drawtreestem();
         tree::drawfirstlayer();
         tree::drawsecondlayer();
         tree::drawthirdlayer();
+        glPopMatrix();
     }
 
     ////nice to do's same as the above
 
-    static void drawTree(){
+
+    static void drawtree()
+    {
+        glPushMatrix();
+
         glTranslated(0,0,-20);
         tree::drawtreestem();
         tree::drawfirstlayer();
         tree::drawsecondlayer();
         tree::drawthirdlayer();
+
+        glPopMatrix();
     }
+
 
     static void drawtreestem(){
       glPushMatrix();
@@ -411,7 +443,13 @@ void reshapeFunc (int w, int h)
 }
 
 //------------------------------  display   -------------------------------
+double zombie::zZ;
+double zombie::zX;
 double accm=0.01;
+
+ int xcurr , zcurr ;
+ std::vector <tree *> tObj;
+
 void display (void)
 {
 
@@ -436,13 +474,13 @@ void display (void)
     glRotated(rotAngle,0,1,0);
     //calculate position
     if(left==true){
-        movZ+=0.02*sin((rotAngle+180)*3.14/180);
-        movX+=0.02*cos((rotAngle+180)*3.14/180);
+        movZ+=0.02*sin((rotAngle)*3.14/180);
+        movX+=0.02*cos((rotAngle)*3.14/180);
     }
     if(right==true)
     {
-        movZ+=0.02*sin((rotAngle)*3.14/180);
-        movX+=0.02*cos((rotAngle)*3.14/180);
+        movZ+=0.02*sin((rotAngle+180)*3.14/180);
+        movX+=0.02*cos((rotAngle+180)*3.14/180);
     }
     if(forw==true){
         //accm+=0.01;
@@ -450,12 +488,13 @@ void display (void)
         movX+=0.02*cos((rotAngle+90)*3.14/180);
 
     }
-   /* if(backw==true)
+    if(backw==true)
     {
     //movZ-=0.1*sin(rotAngle+90);
-    movZ+=0.01*sin((rotAngle+270)*3.14/180);
-    movX+=0.01*cos((rotAngle+270)*3.14/180);}
-*/
+        movZ+=0.01*sin((rotAngle+270)*3.14/180);
+        movX+=0.01*cos((rotAngle+270)*3.14/180);
+    }
+
    // glRotated(-rotAngle,0,1,0);
    ;
     //glRotated(rotAngle,0,1,0);
@@ -467,6 +506,33 @@ void display (void)
     //glTranslatef    (movX, 0.0,movZ );
     //Drawing the zombie
     zombie::drawZ();
+
+    //generating random trees
+
+    //if(xcurr != movX && zcurr != movZ)
+      //  {
+    if(tObj.size()<=20){
+    for(int i = 0;i < 3;i++)
+    {
+        double randx = rand() % 50 + 1;
+        double randz = rand() % 50 + 1;
+        //printf("\n%0.2f \t %0.2f \n",randx,randz);
+        tree *t = new tree(randx,randz);
+        tObj.push_back(t);
+    }
+     }//printf("\here %d\n",tObj.size());
+
+    for(int i =0 ; i < tObj.size(); i++)
+    {
+        //printf("jkadssadahds");
+        tObj[i]->drawTree();
+    }
+
+   // }
+    xcurr = movX;
+    zcurr = movZ;
+    //tree::drawTree();
+
 
     tree::drawTree();
     glPopMatrix();
@@ -540,7 +606,7 @@ int main (int argc, char **argv)
     glutSpecialUpFunc(specialKeyUp);
     texture(); // Lighting and textures
 
-
+    zombie::init();
     glutMainLoop();
 }
 /* tree::drawtreestem();
