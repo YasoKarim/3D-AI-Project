@@ -250,10 +250,11 @@ class zombie
 //TODO create zombie draw function
 public:
     //int speed;
-    static double zX,zZ;
+    static double zX,zZ,chase;
     static void init(){
     zombie::zX=0;
     zombie::zZ=20;
+    zombie::zZ=0;
     }
     static void drawZ()
     {
@@ -265,11 +266,13 @@ public:
             rotangleZombie+=180;
         }
 
-        zZ+=0.02*sin((rotAngle+90)*3.14/180);
-        zX+=0.02*cos((rotAngle+90)*3.14/180);
-
+        //zZ+=0.007*sin((rotAngle+90)*3.14/180);
+        //zX+=0.007*cos((rotAngle+90)*3.14/180);
+        //chase+=0.01;
         glTranslated(zX,0,zZ);
+        rotangleZombie = atan( (movX-zX) / ( movZ+zZ )) * (180 / 3.14);
         glRotated(rotangleZombie,0,1,0);
+        //glTranslated(0,0,-chase);
         zombie::drawhead();
         zombie::Body();
         zombie::leftLeg();
@@ -429,6 +432,7 @@ void reshapeFunc (int w, int h)
 //------------------------------  display   -------------------------------
 double zombie::zZ;
 double zombie::zX;
+double zombie::chase;
 double accm=0.01;
  int xcurr , zcurr ;
  std::vector <tree *> tObj;
