@@ -259,7 +259,7 @@ public:
     static void drawZ()
     {
         glPushMatrix();
-        //printf("\nMovx: %0.2f \t MovZ: %0.2f \t userAngle:%0.2f \t",movX,movZ,rotAngle);
+        printf("\nMovx: %0.2f \t MovZ: %0.2f \t userAngle:%0.2f \t",movX,movZ,rotAngle);
         rotangleZombie = atan( (movX-zX) / ( movZ-zZ )) * (180 / 3.14);
         //printf("movZ: %0.2f \t movZ: %0.2f \t userAngle:%0.2f \t",movX,movZ,rotAngle);
         if(movZ>zZ){
@@ -269,7 +269,7 @@ public:
         zZ+=0.007*sin((rotAngle+90)*3.14/180);
         zX+=0.007*cos((rotAngle+90)*3.14/180);
         //chase+=0.01;
-        printf("%0.2f -- %0.2f\n",zX,zZ);
+        //printf("%0.2f -- %0.2f\n",zX,zZ);
         glTranslated(zX,0,zZ);
         //rotangleZombie = atan( (movX-zX) / ( movZ+zZ )) * (180 / 3.14);
         glRotated(rotangleZombie,0,1,0);
