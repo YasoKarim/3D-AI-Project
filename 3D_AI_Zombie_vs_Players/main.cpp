@@ -255,7 +255,6 @@ public:
         printf("Movx: %0.2f \t MovZ: %0.2f \t userAngle:%0.2f \t",movX,movZ,rotAngle);
         rotangleZombie = atan( (movX-0) / ( movZ+20 )) * (180 / 3.14);
         printf("%0.2f\n",rotangleZombie);
-
         glTranslated(0,0,20);
         glRotated(rotangleZombie,0,1,0);
         zombie::drawhead();
