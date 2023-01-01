@@ -111,6 +111,17 @@ public:
        glPopMatrix ();
 
       }
+      static void square(double sqwidth=20.0, double sqlength=20.0){
+       glPushMatrix();
+       glScaled(sqwidth,0,sqlength);
+       glBegin(GL_POLYGON);
+       glVertex3f( -1,0,-1);
+       glVertex3f(1,0,-1);
+       glVertex3f(1,0,1);
+       glVertex3f(-1,0,1);
+       glEnd();
+       glPopMatrix();
+      }
 };
 
 bool right=false,left=false,forw=false,backw=false,rotR=false,rotL=false;
@@ -251,25 +262,26 @@ public:
     //int speed;
     static double zX,zZ,chase;
     static void init(){
-    zombie::zX=0;
-    zombie::zZ=20;
-    zombie::zZ=0;
+    zombie::zX=10;
+    zombie::zZ=-10;
+    //zombie::zZ=0;
     }
     static void drawZ()
     {
         glPushMatrix();
-        //printf("Movx: %0.2f \t MovZ: %0.2f \t userAngle:%0.2f \t",movX,movZ,rotAngle);
-        rotangleZombie = atan( (movX-zX) / ( movZ+zZ )) * (180 / 3.14);
+        //printf("\nMovx: %0.2f \t MovZ: %0.2f \t userAngle:%0.2f \t",movX,movZ,rotAngle);
+        rotangleZombie = atan( (movX-zX) / ( movZ-zZ )) * (180 / 3.14);
         //printf("movZ: %0.2f \t movZ: %0.2f \t userAngle:%0.2f \t",movX,movZ,rotAngle);
-        if(-movZ<zZ){
+        if(movZ>zZ){
             rotangleZombie+=180;
         }
 
-        //zZ+=0.007*sin((rotAngle+90)*3.14/180);
-        //zX+=0.007*cos((rotAngle+90)*3.14/180);
+        zZ+=0.007*sin((rotAngle+90)*3.14/180);
+        zX+=0.007*cos((rotAngle+90)*3.14/180);
         //chase+=0.01;
+        printf("%0.2f -- %0.2f\n",zX,zZ);
         glTranslated(zX,0,zZ);
-        rotangleZombie = atan( (movX-zX) / ( movZ+zZ )) * (180 / 3.14);
+        //rotangleZombie = atan( (movX-zX) / ( movZ+zZ )) * (180 / 3.14);
         glRotated(rotangleZombie,0,1,0);
         //glTranslated(0,0,-chase);
         zombie::drawhead();
@@ -288,7 +300,7 @@ public:
         //glRotated(45,0,1,0);
         basicShapes::cuboid(0.7,0.7,0.7);
         glColor3f(1.0,0.0,0.0);
-        glTranslated(0,0,1);
+        glTranslated(0,0,-1);
         basicShapes::cuboid(0.2,0.2,0.2);
         glPopMatrix();
 
@@ -428,6 +440,16 @@ public:
       glPopMatrix();
    }
 };
+class ground{
+  public:
+static void drawground(){
+      glPushMatrix();
+      glColor3f(0,0,0);
+      //glTranslatef(-1,0,-1);
+      basicShapes::square(20.0,20.0);
+      glPopMatrix();
+    }
+};
 float xRotated = 90.0, yRotated = 0.0, zRotated = 0.0;
 float x=0;
 //------------------------------  reshapeFunc  ---------------------------------
@@ -450,6 +472,7 @@ double accm=0.01;
  int xcurr , zcurr ;
  std::vector <tree *> tObj;
 
+
 void display (void)
 {
 
@@ -457,7 +480,7 @@ void display (void)
     glClear        (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(100.0/255.0,128.0/255.0,122.0/255.0,0.0);
     //glClearColor(130,128,122);
-    glLoadIdentity ();
+
     //glTranslatef    (0.0, 0.0, -20.0);
     //glRotated(x,1,1,0);
 	//Your code is written here
@@ -467,28 +490,27 @@ void display (void)
     tree::drawsecondlayer();
     tree::drawthirdlayer();*/
 
-
     glPushMatrix();
     if(rotL==true) rotAngle-=0.2;
     if(rotR==true) rotAngle+=0.2;
     glRotated(rotAngle,0,1,0);
     //calculate position
     if(left==true){
-        movZ+=0.02*sin((rotAngle)*3.14/180);
-        movX+=0.02*cos((rotAngle)*3.14/180);
-    }
-    if(right==true)
-    {
         movZ+=0.02*sin((rotAngle+180)*3.14/180);
         movX+=0.02*cos((rotAngle+180)*3.14/180);
     }
-    if(forw==true){
+    if(right==true)
+    {
+        movZ+=0.02*sin((rotAngle)*3.14/180);
+        movX+=0.02*cos((rotAngle)*3.14/180);
+    }
+    if(backw==true){
         //accm+=0.01;
         movZ+=0.02*sin((rotAngle+90)*3.14/180);
         movX+=0.02*cos((rotAngle+90)*3.14/180);
 
     }
-    if(backw==true)
+    if(forw==true)
     {
     //movZ-=0.1*sin(rotAngle+90);
         movZ+=0.01*sin((rotAngle+270)*3.14/180);
@@ -500,7 +522,7 @@ void display (void)
     //glRotated(rotAngle,0,1,0);
 
     //printf("%0.2f\n",rotAngle);
-    glTranslatef    (movX, 0.0, movZ);
+    glTranslatef    (-movX, 0.0, -movZ);
     //glTranslatef    (-movX, 0.0,-movZ );
 
     //glTranslatef    (movX, 0.0,movZ );
@@ -512,7 +534,7 @@ void display (void)
     //if(xcurr != movX && zcurr != movZ)
       //  {
     if(tObj.size()<=20){
-    for(int i = -100;i < 100;i++)
+    for(int i = 0;i < 3;i++)
     {
         double randx = rand() % 50 + 1;
         double randz = rand() % 50 + 1;
@@ -533,7 +555,7 @@ void display (void)
     zcurr = movZ;
     //tree::drawTree();
 
-
+    ground::drawground();
     tree::drawtree();
     glPopMatrix();
     glutSwapBuffers();
@@ -581,6 +603,7 @@ const GLfloat high_shininess[] = { 100.0f };
     glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
 
 
+
 }
 
 //----------------------------------  main  ------------------------------------
@@ -593,6 +616,7 @@ int main (int argc, char **argv)
     glutInitWindowSize     (800, 700);
     glutInitWindowPosition (700, 200);
     glutCreateWindow       ("Zombie vs Player");
+
 
     glClearColor (1.0, 1.0, 1.0, 0.0);
 
