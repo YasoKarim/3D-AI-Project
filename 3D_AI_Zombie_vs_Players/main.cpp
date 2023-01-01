@@ -244,7 +244,8 @@ public:
 };
 
 //NOTICE nice to do's are super hard to accomplish don't waste time on those if you don't have it
-
+int xcurrZ , zcurrZ ;
+// std::vector <zombie *> tObjZ;
 class zombie
 {
 //TODO create zombie draw function
@@ -361,7 +362,7 @@ public:
 
     ////nice to do's same as the above
 
-    /*static void drawTree()
+    static void drawtree()
     {
         glPushMatrix();
         glTranslated(0,0,-20);
@@ -370,7 +371,7 @@ public:
         tree::drawsecondlayer();
         tree::drawthirdlayer();
         glPopMatrix();
-    }*/
+    }
 
     static void drawtreestem()
     {
@@ -468,11 +469,12 @@ void display (void)
     //glTranslatef    (movX, 0.0,movZ );
     //Drawing the zombie
     zombie::drawZ();
+    tree::drawtree();
     //generating random trees
 
     //if(xcurr != movX && zcurr != movZ)
       //  {
-    if(tObj.size()<=20){
+    if(tObj.size() <= 20){
     for(int i = 0;i < 3;i++)
     {
         double randx = rand() % 50 + 1;
