@@ -254,9 +254,9 @@ public:
     static void drawZ()
     {
         glPushMatrix();
-        printf("Movx: %0.2f \t MovZ: %0.2f \t userAngle:%0.2f \t",movX,movZ,rotAngle);
+        //printf("Movx: %0.2f \t MovZ: %0.2f \t userAngle:%0.2f \t",movX,movZ,rotAngle);
         rotangleZombie = atan( (movX-0) / ( movZ+20 )) * (180 / 3.14);
-        printf("%0.2f\n",rotangleZombie);
+        //printf("%0.2f\n",rotangleZombie);
         glTranslated(0,0,20);
         glRotated(rotangleZombie,0,1,0);
         zombie::drawhead();
@@ -338,27 +338,30 @@ public:
 class tree
 {//TODO create tree draw function
 public:
-    int x,z;
+    double x,z;
     //notes drawing a cone manually is gonna be hard or impossible i tried with the cylinder
     //construct the tree out of pyramids instead
     //code the pyramid inside basicShapes class in a separate function
-    tree(int x, int z)
+    tree(double x, double z)
     {
         this->x = x;
         this->z = z;
     }
-     void drawtree()
+    void drawTree()
     {
+        glPushMatrix();
+        printf("\n----------->>%0.2f------%0.2f<<----------",x,z);
         glTranslated(x,0,z);
         tree::drawtreestem();
         tree::drawfirstlayer();
         tree::drawsecondlayer();
         tree::drawthirdlayer();
+        glPopMatrix();
     }
 
     ////nice to do's same as the above
 
-    static void drawTree()
+    /*static void drawTree()
     {
         glPushMatrix();
         glTranslated(0,0,-20);
@@ -367,7 +370,7 @@ public:
         tree::drawsecondlayer();
         tree::drawthirdlayer();
         glPopMatrix();
-    }
+    }*/
 
     static void drawtreestem()
     {
@@ -415,6 +418,7 @@ void reshapeFunc (int w, int h)
 //------------------------------  display   -------------------------------
 double accm=0.01;
  int xcurr , zcurr ;
+ std::vector <tree *> tObj;
 void display (void)
 {
 
@@ -465,23 +469,27 @@ void display (void)
     //Drawing the zombie
     zombie::drawZ();
     //generating random trees
-    std::vector <tree> tObj;
-    if(xcurr != movX && zcurr != movZ)
-        {
+
+    //if(xcurr != movX && zcurr != movZ)
+      //  {
+    if(tObj.size()<=20){
     for(int i = 0;i < 3;i++)
     {
-        int randx = rand() % 100 + 1;
-        int randz = rand() % 100 + 1;
-        tree * t = new tree(randx,randz);
-        tObj.push_back(t.drawTree());
+        double randx = rand() % 50 + 1;
+        double randz = rand() % 50 + 1;
+        //printf("\n%0.2f \t %0.2f \n",randx,randz);
+        tree *t = new tree(randx,randz);
+        tObj.push_back(t);
     }
+     }//printf("\here %d\n",tObj.size());
 
     for(int i =0 ; i < tObj.size(); i++)
     {
-        tObj[i].drawTree();
+        //printf("jkadssadahds");
+        tObj[i]->drawTree();
     }
 
-    }
+   // }
     xcurr = movX;
     zcurr = movZ;
     //tree::drawTree();
