@@ -5,6 +5,7 @@
 #include <windows.h>
 #include <math.h>
 #include <stdio.h>
+#include <vector>
 //IMPORTANT polygons MUST be drawn counter-clockwise
 //design using https://technology.cpm.org/general/3dgraph/
 void keyboard(unsigned char key,int x,int y);
@@ -248,15 +249,15 @@ class zombie
 //TODO create zombie draw function
 public:
     //int speed;
-    static double zX,zZ;
+    static double zX,zZ,chase;
     static void init(){
     zombie::zX=0;
     zombie::zZ=20;
+    zombie::zZ=0;
     }
     static void drawZ()
     {
         glPushMatrix();
-
         //printf("Movx: %0.2f \t MovZ: %0.2f \t userAngle:%0.2f \t",movX,movZ,rotAngle);
         rotangleZombie = atan( (movX-zX) / ( movZ+zZ )) * (180 / 3.14);
         //printf("movZ: %0.2f \t movZ: %0.2f \t userAngle:%0.2f \t",movX,movZ,rotAngle);
@@ -264,15 +265,13 @@ public:
             rotangleZombie+=180;
         }
 
-        zZ+=0.02*sin((rotAngle+90)*3.14/180);
-        zX+=0.02*cos((rotAngle+90)*3.14/180);
-
+        //zZ+=0.007*sin((rotAngle+90)*3.14/180);
+        //zX+=0.007*cos((rotAngle+90)*3.14/180);
+        //chase+=0.01;
         glTranslated(zX,0,zZ);
-
+        rotangleZombie = atan( (movX-zX) / ( movZ+zZ )) * (180 / 3.14);
         glRotated(rotangleZombie,0,1,0);
-         if(rotangleZombie==rotAngle){
-        glRotated((rotangleZombie+270),0,1,0);
-       }
+        //glTranslated(0,0,-chase);
         zombie::drawhead();
         zombie::Body();
         zombie::leftLeg();
@@ -445,6 +444,7 @@ void reshapeFunc (int w, int h)
 //------------------------------  display   -------------------------------
 double zombie::zZ;
 double zombie::zX;
+double zombie::chase;
 double accm=0.01;
 
  int xcurr , zcurr ;
@@ -512,7 +512,7 @@ void display (void)
     //if(xcurr != movX && zcurr != movZ)
       //  {
     if(tObj.size()<=20){
-    for(int i = 0;i < 3;i++)
+    for(int i = -100;i < 100;i++)
     {
         double randx = rand() % 50 + 1;
         double randz = rand() % 50 + 1;
@@ -534,7 +534,7 @@ void display (void)
     //tree::drawTree();
 
 
-    tree::drawTree();
+    tree::drawtree();
     glPopMatrix();
     glutSwapBuffers();
 }
