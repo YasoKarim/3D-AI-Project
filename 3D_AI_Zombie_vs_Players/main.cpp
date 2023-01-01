@@ -250,14 +250,25 @@ class zombie
 //TODO create zombie draw function
 public:
     //int speed;
-
+    static double zX,zZ;
+    static void init(){
+    zombie::zX=0;
+    zombie::zZ=20;
+    }
     static void drawZ()
     {
         glPushMatrix();
         //printf("Movx: %0.2f \t MovZ: %0.2f \t userAngle:%0.2f \t",movX,movZ,rotAngle);
-        rotangleZombie = atan( (movX-0) / ( movZ+20 )) * (180 / 3.14);
-        //printf("%0.2f\n",rotangleZombie);
-        glTranslated(0,0,20);
+        rotangleZombie = atan( (movX-zX) / ( movZ+zZ )) * (180 / 3.14);
+        //printf("movZ: %0.2f \t movZ: %0.2f \t userAngle:%0.2f \t",movX,movZ,rotAngle);
+        if(-movZ<zZ){
+            rotangleZombie+=180;
+        }
+
+        zZ+=0.02*sin((rotAngle+90)*3.14/180);
+        zX+=0.02*cos((rotAngle+90)*3.14/180);
+
+        glTranslated(zX,0,zZ);
         glRotated(rotangleZombie,0,1,0);
         zombie::drawhead();
         zombie::Body();
@@ -350,7 +361,7 @@ public:
     void drawTree()
     {
         glPushMatrix();
-        printf("\n----------->>%0.2f------%0.2f<<----------",x,z);
+        //printf("\n----------->>%0.2f------%0.2f<<----------",x,z);
         glTranslated(x,0,z);
         tree::drawtreestem();
         tree::drawfirstlayer();
@@ -416,6 +427,8 @@ void reshapeFunc (int w, int h)
 }
 
 //------------------------------  display   -------------------------------
+double zombie::zZ;
+double zombie::zX;
 double accm=0.01;
  int xcurr , zcurr ;
  std::vector <tree *> tObj;
@@ -437,13 +450,13 @@ void display (void)
     glRotated(rotAngle,0,1,0);
     //calculate position
     if(left==true){
-        movZ+=0.02*sin((rotAngle+180)*3.14/180);
-        movX+=0.02*cos((rotAngle+180)*3.14/180);
+        movZ+=0.02*sin((rotAngle)*3.14/180);
+        movX+=0.02*cos((rotAngle)*3.14/180);
     }
     if(right==true)
     {
-        movZ+=0.02*sin((rotAngle)*3.14/180);
-        movX+=0.02*cos((rotAngle)*3.14/180);
+        movZ+=0.02*sin((rotAngle+180)*3.14/180);
+        movX+=0.02*cos((rotAngle+180)*3.14/180);
     }
     if(forw==true){
         //accm+=0.01;
@@ -451,12 +464,13 @@ void display (void)
         movX+=0.02*cos((rotAngle+90)*3.14/180);
 
     }
-   /* if(backw==true)
+    if(backw==true)
     {
     //movZ-=0.1*sin(rotAngle+90);
-    movZ+=0.01*sin((rotAngle+270)*3.14/180);
-    movX+=0.01*cos((rotAngle+270)*3.14/180);}
-*/
+        movZ+=0.01*sin((rotAngle+270)*3.14/180);
+        movX+=0.01*cos((rotAngle+270)*3.14/180);
+    }
+
    // glRotated(-rotAngle,0,1,0);
    //;
     //glRotated(rotAngle,0,1,0);
@@ -565,7 +579,7 @@ int main (int argc, char **argv)
     glutSpecialUpFunc(specialKeyUp);
     texture(); // Lighting and textures
 
-
+    zombie::init();
     glutMainLoop();
 }
 /* tree::drawtreestem();
