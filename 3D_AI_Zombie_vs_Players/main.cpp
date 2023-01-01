@@ -5,6 +5,8 @@
 #include <windows.h>
 #include <math.h>
 #include <stdio.h>
+#include <vector>
+#include <stdlib.h>
 //IMPORTANT polygons MUST be drawn counter-clockwise
 //design using https://technology.cpm.org/general/3dgraph/
 void keyboard(unsigned char key,int x,int y);
@@ -283,11 +285,9 @@ public:
     {
         glPushMatrix();
         glColor3f(0,0.9,0);
-
         glTranslated(0,-2.2,0);
         //glRotated(45,0,1,0);
         basicShapes::cuboid(0.5,1.2,1.5);
-
         glPopMatrix();
     }
 
@@ -333,22 +333,23 @@ public:
 
 
 };
-//To draw zombie snowman
-class zombieSnowMan{
-public:
-    static void drawSnowMan()
-    {
-        basicShapes::shperes(1);
-    }
-};
 
-class tree{//TODO create tree draw function
+
+class tree
+{//TODO create tree draw function
 public:
+    int x,z;
     //notes drawing a cone manually is gonna be hard or impossible i tried with the cylinder
     //construct the tree out of pyramids instead
     //code the pyramid inside basicShapes class in a separate function
-    static void drawtree()
+    tree(int x, int z)
     {
+        this->x = x;
+        this->z = z;
+    }
+     void drawtree()
+    {
+        glTranslated(x,0,z);
         tree::drawtreestem();
         tree::drawfirstlayer();
         tree::drawsecondlayer();
@@ -357,15 +358,19 @@ public:
 
     ////nice to do's same as the above
 
-    static void drawTree(){
+    static void drawTree()
+    {
+        glPushMatrix();
         glTranslated(0,0,-20);
         tree::drawtreestem();
         tree::drawfirstlayer();
         tree::drawsecondlayer();
         tree::drawthirdlayer();
+        glPopMatrix();
     }
 
-    static void drawtreestem(){
+    static void drawtreestem()
+    {
       glPushMatrix();
       glColor3f(0.4,0.2,0);
       glTranslatef(10,-3,0);
@@ -409,6 +414,7 @@ void reshapeFunc (int w, int h)
 
 //------------------------------  display   -------------------------------
 double accm=0.01;
+ int xcurr , zcurr ;
 void display (void)
 {
 
@@ -448,7 +454,7 @@ void display (void)
     movX+=0.01*cos((rotAngle+270)*3.14/180);}
 */
    // glRotated(-rotAngle,0,1,0);
-   ;
+   //;
     //glRotated(rotAngle,0,1,0);
 
     //printf("%0.2f\n",rotAngle);
@@ -458,8 +464,28 @@ void display (void)
     //glTranslatef    (movX, 0.0,movZ );
     //Drawing the zombie
     zombie::drawZ();
+    //generating random trees
+    std::vector <tree> tObj;
+    if(xcurr != movX && zcurr != movZ)
+        {
+    for(int i = 0;i < 3;i++)
+    {
+        int randx = rand() % 100 + 1;
+        int randz = rand() % 100 + 1;
+        tree * t = new tree(randx,randz);
+        tObj.push_back(t.drawTree());
+    }
 
-    tree::drawTree();
+    for(int i =0 ; i < tObj.size(); i++)
+    {
+        tObj[i].drawTree();
+    }
+
+    }
+    xcurr = movX;
+    zcurr = movZ;
+    //tree::drawTree();
+
     glPopMatrix();
     glutSwapBuffers();
 }
@@ -537,4 +563,13 @@ int main (int argc, char **argv)
 /* tree::drawtreestem();
     tree::drawfirstlayer();
     tree::drawsecondlayer();
-    tree::drawthirdlayer();*/
+    tree::drawthirdlayer();
+    //To draw zombie snowman
+class zombieSnowMan{
+public:
+    static void drawSnowMan()
+    {
+        basicShapes::shperes(1);
+    }
+};
+    */
