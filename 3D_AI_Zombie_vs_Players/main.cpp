@@ -6,6 +6,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <vector>
+#include <mmsystem.h>
 #include <stdlib.h>
 
 //IMPORTANT polygons MUST be drawn counter-clockwise
@@ -113,6 +114,7 @@ public:
        glPopMatrix ();
 
       }
+
 };
 
 bool right=false,left=false,forw=false,backw=false,rotR=false,rotL=false;
@@ -160,6 +162,7 @@ void keyboard(unsigned char key,int x,int y)
      }
      if(key == ' ')
      {
+       sndPlaySound("sound.wav",SND_ASYNC);
        flag = 1;
        //printf("Shoot\n");
      }
@@ -217,7 +220,7 @@ public:
         glRotated(80,-1,0,0);
         glRotated(20,0,0,-1);
 
-        basicShapes::cubosid(0.125,0.125,0.6);
+        basicShapes::cuboid(0.125,0.125,0.6);
         glPopMatrix();
 
         //right arm
@@ -265,7 +268,6 @@ public:
 };
 
 //NOTICE nice to do's are super hard to accomplish don't waste time on those if you don't have it
-
 class zombie
 {
 //TODO create zombie draw function
@@ -387,9 +389,11 @@ int hitCounter;
     {
         glPushMatrix();
         glColor3f(0,0.9,0);
+
         glTranslated(0,-1.7,0);
         //glRotated(45,0,1,0);
         basicShapes::cuboid(1.00,1.2,1.2);
+
         glPopMatrix();
     }
 
@@ -463,11 +467,18 @@ int hitCounter;
 
 
 };
-
-
-class tree
-{//TODO create tree draw function
+//To draw zombie snowman
+class zombieSnowMan{
 public:
+    static void drawSnowMan()
+    {
+        basicShapes::shperes(1);
+    }
+};
+
+class tree{//TODO create tree draw function
+public:
+
     double x,z;
     //notes drawing a cone manually is gonna be hard or impossible i tried with the cylinder
     //construct the tree out of pyramids instead
@@ -482,6 +493,7 @@ public:
         glPushMatrix();
         //printf("\n----------->>%0.2f------%0.2f<<----------",x,z);
         glTranslated(x,0,z);
+
         tree::drawtreestem();
         tree::drawfirstlayer();
         tree::drawsecondlayer();
@@ -494,16 +506,19 @@ public:
     static void drawtree()
     {
         glPushMatrix();
+
         glTranslated(0,0,-20);
         tree::drawtreestem();
         tree::drawfirstlayer();
         tree::drawsecondlayer();
         tree::drawthirdlayer();
+
         glPopMatrix();
     }
 
-    static void drawtreestem()
-    {
+
+
+    static void drawtreestem(){
       glPushMatrix();
       glColor3f(0.4,0.2,0);
       glTranslatef(10,-3,0);
@@ -532,6 +547,30 @@ public:
       glPopMatrix();
    }
 };
+/*class stars{
+public:
+    static drawstars(){
+      glPushMatrix();
+      glBegin(GL_POINTS);
+      glColor3f(1,1,1);
+      glVertex3f(10,15,0);
+      glEnd();
+      glPopMatrix();
+    }
+};*/
+class moon{
+public :
+    static void drawmoon(){
+    glPushMatrix();
+    glColor3f(1,1,1);
+    glTranslated(10,20,-20);
+    basicShapes::shperes(1);
+
+    glPopMatrix();
+    }
+
+};
+
 float xRotated = 90.0, yRotated = 0.0, zRotated = 0.0;
 float x=0;
 //------------------------------  reshapeFunc  ---------------------------------
@@ -551,9 +590,12 @@ void reshapeFunc (int w, int h)
 //double zombie::chase;
 int fPerson::health;
 double accm=0.01;
+
  int xcurr , zcurr ,xcurrZ,zcurrZ;
 std::vector <tree *> tObj;
 std::vector <zombie *> tObjZ;
+
+
 void display (void)
 {
 
@@ -561,11 +603,16 @@ void display (void)
     glClear        (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(100.0/255.0,128.0/255.0,122.0/255.0,0.0);
     //glClearColor(130,128,122);
-    glLoadIdentity ();
+
     //glTranslatef    (0.0, 0.0, -20.0);
     //glRotated(x,1,1,0);
 	//Your code is written here
     fPerson::drawLeftArm();//replace this with the draw function you want to test
+    /*tree::drawtreestem();
+    tree::drawfirstlayer();
+    tree::drawsecondlayer();
+    tree::drawthirdlayer();*/
+
     glPushMatrix();
     if(rotL==true) rotAngle-=0.2;
     if(rotR==true) rotAngle+=0.2;
@@ -597,7 +644,7 @@ void display (void)
     }
 
    // glRotated(-rotAngle,0,1,0);
-   //;
+   ;
     //glRotated(rotAngle,0,1,0);
 
     //printf("%0.2f\n",rotAngle);
@@ -606,8 +653,10 @@ void display (void)
 
     //glTranslatef    (movX, 0.0,movZ );
     //Drawing the zombie
+
     tree::drawtree();
- //   zombie::drawZ();
+    //zombie::drawZ();
+
 
   //generating random trees
 
@@ -668,11 +717,16 @@ int f = 0;
     }
     flag = 0;
 
+
+
+
    // }
     //xcurr = movX;
     //zcurr = movZ;
     //tree::drawTree();
 
+    moon::drawmoon();
+    tree::drawtree();
     glPopMatrix();
     glutSwapBuffers();
 }
@@ -719,6 +773,7 @@ const GLfloat high_shininess[] = { 100.0f };
     glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
 
 
+
 }
 
 //----------------------------------  main  ------------------------------------
@@ -732,6 +787,7 @@ int main (int argc, char **argv)
     glutInitWindowPosition (700, 200);
     glutCreateWindow       ("Zombie vs Player");
 
+
     glClearColor (1.0, 1.0, 1.0, 0.0);
 
     glutDisplayFunc (display);
@@ -744,7 +800,11 @@ int main (int argc, char **argv)
     glutSpecialUpFunc(specialKeyUp);
     texture(); // Lighting and textures
 
+    glPointSize(5);
+//    zombie::init();
+
     fPerson::health=100;
+
 
 
     glutMainLoop();
@@ -758,6 +818,7 @@ int main (int argc, char **argv)
 tree::drawtreestem();
     tree::drawfirstlayer();
     tree::drawsecondlayer();
+
     tree::drawthirdlayer();
     //To draw zombie snowman
 class zombieSnowMan{
@@ -797,3 +858,4 @@ public:
      //   tObjZ.push_back(ZB1);
             }
     */
+
