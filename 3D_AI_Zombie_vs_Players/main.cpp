@@ -106,13 +106,12 @@ public:
 
       glPopMatrix();
       }
-      static void shperes(double radius = 1.0)
+     static void shperes(double radius = 1.0)
       {
        glPushMatrix ();
        glScaled(radius,1,1);
-       glutSolidSphere (1.0, 5, 30);
+       glutSolidSphere (1.0, 50, 50);
        glPopMatrix ();
-
       }
 
 };
@@ -164,17 +163,7 @@ void keyboard(unsigned char key,int x,int y)
      {
        sndPlaySound("sound.wav",SND_ASYNC);
        flag = 1;
-       //printf("Shoot\n");
      }
-
-//-----> ''
-//if(z x )
-    //if(key==GLUT_KEY_LEFT){
-
-    //}
-    //else if(key==GLUT_KEY_RIGHT){
-
-   // }
 }
 // Unclicked keys
 void keyboardUp(unsigned char key,int x,int y){
@@ -241,10 +230,6 @@ public:
         //glTranslated(0,0.5,-18.5);
 
         glTranslated(0,-0.5,-1.5);
-        //glPushMatrix();
-        //glTranslated(0,0.5,-18.5);
-        //glRotated(0,0,1,0);
-        //glTranslated(0,-0.5,18.5);
         //gun handle
         glPushMatrix();
         glColor3f(0.2,0.2,0.2);
@@ -261,6 +246,7 @@ public:
         basicShapes::cuboid(0.05,0.05,0.25);
         glPopMatrix();
         //glPopMatrix();
+
         glPopMatrix();
     }
 
@@ -282,12 +268,6 @@ int hitCounter;
         this->zZ = z;
         hitCounter=0;
     }
-   // static double chase;
-   /* static void init(){
-    zombie::zX=10;
-    zombie::zZ=-10;
-    //zombie::zZ=0;
-    }*/
     //Detect if there is a zombie or not
     void detect()
     {
@@ -296,13 +276,14 @@ int hitCounter;
         return;
      //Angle we want to look at
      double detectAngle = atan( ( movX - zX) / ( movZ - zZ )) * (180 / 3.14);
-     if(movZ < zZ){
+     if(movZ < zZ)
+     {
             detectAngle+=180;
-        }
+     }
 
 
-    if(detectAngle<0) detectAngle+=360;
-    if(-rotAngle<0) rotAngle-=360;
+     if(detectAngle<0) detectAngle+=360;
+     if(-rotAngle<0) rotAngle-=360;
      //printf("%0.2f ------------ %0.2f----------%0.2f ------------%0.2f\n ",detectAngle,-rotAngle,movX,movZ);
      if(detectAngle - 4 <= -rotAngle  && detectAngle + 4 >= -rotAngle)
         {
@@ -316,40 +297,38 @@ int hitCounter;
 
 
     }
-//the health
-//if(health != 0)
     void drawZ()
     {
         glPushMatrix();
 
 
         rotangleZombie = atan( (movX - zX) / ( movZ - zZ )) * (180 / 3.14);
-        //printf("\nMovx: %0.2f \t MovZ: %0.2f \t userAngle:%0.2f \t zombieAngle:%0.2f",movX,movZ,rotAngle,rotangleZombie);
-        //printf("movZ: %0.2f \t movZ: %0.2f \t userAngle:%0.2f \t",movX,movZ,rotAngle);
-        if(movZ > zZ){
+        if(movZ > zZ)
+        {
             rotangleZombie += 180;
         }
         double disFromTar=calcDistance(zX,zZ,movX,movZ);
 
-        if(disFromTar>5){
+        if(disFromTar>5)
+        {
             zZ+=0.009*sin((-rotangleZombie+270)*3.14/180);
             zX+=0.009*cos((-rotangleZombie+270)*3.14/180);
         }
-        else{
-
-
-            if(hitCounter==120){
+        else
+        {
+            if(hitCounter==120)
+                {
                 fPerson::health-=20;
                 hitColor=30;
-                if(fPerson::health<=0){
+                if(fPerson::health <= 0){
                     printf("you were eaten");
                     exit(0);
                 }
                 hitCounter=0;
-            }
+                }
             else{
                 hitCounter++;
-            }
+                }
         }
 
 
@@ -370,13 +349,25 @@ int hitCounter;
         glPopMatrix();
     }
 
+    void drawDead()
+    {
+        glPushMatrix();
+        glTranslated(zX,-5,zZ);
+        glRotated(90,1,0,0);
+        zombie::drawhead();
+        zombie::Body();
+        zombie::leftLeg();
+        zombie::rightLeg();
+        zombie::rightArm();
+        zombie::leftArm();
+        glPopMatrix();
+    }
     //Drawing head
     static void drawhead()
     {
         glPushMatrix();
         glColor3f(0,0.7,0);
         glTranslated(0,0.1,0);
-        //glRotated(45,0,1,0);
         basicShapes::cuboid(0.7,0.7,0.7);
         glColor3f(0.4,0.1,0.0);
         glTranslated(0,0,-1);
@@ -384,16 +375,17 @@ int hitCounter;
         glPopMatrix();
 
     }
+    static void zombieEyes()
+    {
+
+    }
     //Drawing the body
     static void Body()
     {
         glPushMatrix();
         glColor3f(0,0.9,0);
-
         glTranslated(0,-1.7,0);
-        //glRotated(45,0,1,0);
         basicShapes::cuboid(1.00,1.2,1.2);
-
         glPopMatrix();
     }
 
@@ -404,8 +396,6 @@ int hitCounter;
         glPushMatrix();
         glColor3f(0,0.5,0);
         glTranslated(-0.5,-3.7,0);
-        //glRotated(45,0,1,0);
-//      basicShapes::cuboid(0.4,0.2,0.4);
         basicShapes::cuboid(0.4,1.2,0.8);
         glPopMatrix();
 
@@ -417,15 +407,12 @@ int hitCounter;
 
         glPushMatrix();
         glColor3f(0,0.5,0);
-        //glTranslated(0.5,-3.7,2.9);
         glTranslated(0.5,-3.7,0);
-       // glRotated(45,0,1,0);
-        //basicShapes::cuboid(0.4,0.2,0.5);
         basicShapes::cuboid(0.4,1.2,0.8);
         glPopMatrix();
 
     }
-
+    //Drawing right arm
     static void rightArm()
     {
 
@@ -433,8 +420,6 @@ int hitCounter;
         glColor3f(0,0.5,0);
         //glTranslated(0.5,-3.7,2.9);
         glTranslated(-1.3,-1.3,0);
-       // glRotated(45,0,1,0);
-        //basicShapes::cuboid(0.4,0.2,0.5);
         basicShapes::cuboid(0.3,1.2,0.8);
         glPopMatrix();
 
@@ -445,36 +430,13 @@ int hitCounter;
 
         glPushMatrix();
         glColor3f(0,0.5,0);
-        //glTranslated(0.5,-3.7,2.9);
         glTranslated(1.3,-1.3,0);
-       // glRotated(45,0,1,0);
-        //basicShapes::cuboid(0.4,0.2,0.5);
         basicShapes::cuboid(0.3,1.2,0.8);
         glPopMatrix();
-
     }
-    //notes drawing the face with
-
-    //nice to do's u can use a texture as the face of the zombie instead of drawing yourself
-    //but i couldn't find enough resources that teach that
-
-    //          ||
-    //        \ || /
-    //checkout \  /
-    //          \/
-    //https://www.youtube.com/watch?v=dV1E8vzoGb0
-    //https://community.khronos.org/t/loading-a-bitmap-image-to-use-it-as-a-texture-background-on-canvas-for-drawing/72323
-
 
 };
-//To draw zombie snowman
-class zombieSnowMan{
-public:
-    static void drawSnowMan()
-    {
-        basicShapes::shperes(1);
-    }
-};
+
 
 class tree{//TODO create tree draw function
 public:
@@ -488,12 +450,11 @@ public:
         this -> x = x;
         this -> z = z;
     }
+    //To draw the tree
     void drawTree()
     {
         glPushMatrix();
-        //printf("\n----------->>%0.2f------%0.2f<<----------",x,z);
         glTranslated(x,0,z);
-
         tree::drawtreestem();
         tree::drawfirstlayer();
         tree::drawsecondlayer();
@@ -502,20 +463,6 @@ public:
     }
 
     ////nice to do's same as the above
-
-    static void drawtree()
-    {
-        glPushMatrix();
-
-        glTranslated(0,0,-20);
-        tree::drawtreestem();
-        tree::drawfirstlayer();
-        tree::drawsecondlayer();
-        tree::drawthirdlayer();
-
-        glPopMatrix();
-    }
-
 
 
     static void drawtreestem(){
@@ -547,7 +494,7 @@ public:
       glPopMatrix();
    }
 };
-/*class stars{
+class stars{
 public:
     static drawstars(){
       glPushMatrix();
@@ -557,15 +504,15 @@ public:
       glEnd();
       glPopMatrix();
     }
-};*/
-class moon{
+};
+class moon
+{
 public :
     static void drawmoon(){
     glPushMatrix();
     glColor3f(1,1,1);
     glTranslated(10,20,-20);
-    basicShapes::shperes(1);
-
+    basicShapes::shperes(0.1);
     glPopMatrix();
     }
 
@@ -585,9 +532,6 @@ void reshapeFunc (int w, int h)
 }
 
 //------------------------------  display   -------------------------------
-//double zombie::zZ;
-//double zombie::zX;
-//double zombie::chase;
 int fPerson::health;
 double accm=0.01;
 
@@ -602,17 +546,9 @@ void display (void)
 
     glClear        (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(100.0/255.0,128.0/255.0,122.0/255.0,0.0);
-    //glClearColor(130,128,122);
 
-    //glTranslatef    (0.0, 0.0, -20.0);
-    //glRotated(x,1,1,0);
 	//Your code is written here
     fPerson::drawLeftArm();//replace this with the draw function you want to test
-    /*tree::drawtreestem();
-    tree::drawfirstlayer();
-    tree::drawsecondlayer();
-    tree::drawthirdlayer();*/
-
     glPushMatrix();
     if(rotL==true) rotAngle-=0.2;
     if(rotR==true) rotAngle+=0.2;
@@ -634,35 +570,19 @@ void display (void)
         //accm+=0.01;
         movZ+=0.02*sin((rotAngle+90)*3.14/180);
         movX+=0.02*cos((rotAngle+90)*3.14/180);
-
     }
     if(forw==true)
     {
-    //movZ-=0.1*sin(rotAngle+90);
         movZ+=0.01*sin((rotAngle+270)*3.14/180);
         movX+=0.01*cos((rotAngle+270)*3.14/180);
     }
 
-   // glRotated(-rotAngle,0,1,0);
+
    ;
-    //glRotated(rotAngle,0,1,0);
 
-    //printf("%0.2f\n",rotAngle);
     glTranslatef    (-movX, 0.0, -movZ);
-    //glTranslatef    (-movX, 0.0,-movZ );
-
-    //glTranslatef    (movX, 0.0,movZ );
-    //Drawing the zombie
-
-    tree::drawtree();
-    //zombie::drawZ();
-
-
   //generating random trees
-
-    //if(xcurr != movX && zcurr != movZ)
-      //
-        int ftree =0;
+    int ftree = 0;
     if(tObj.size() <= 50)
         {
     for(int i = 0;i < 10;i++)
@@ -671,7 +591,6 @@ void display (void)
         double randx = rand() % 50 + 1;
         double randz =  rand() % 50 + 1;
 
-        //printf("\n%0.2f \t %0.2f \n",randx,randz);
         tree *t  = new tree(randx , randz);
         tree *t1 = new tree(randx * -1,randz * -1);
         tree *t2 = new tree(randx, randz * -1);
@@ -684,12 +603,10 @@ void display (void)
     }
 
     }
-     //printf("\here %d\n",tObj.size());
 
     for(int i =0 ; i < tObj.size(); i++)
     {
-        //printf("jkadssadahds");
-        tObj[i]-> drawTree();
+                tObj[i]-> drawTree();
     }
 int f = 0;
  if(tObjZ.size() <= 6)
@@ -709,28 +626,29 @@ int f = 0;
         tObjZ.push_back(zb3);
 
      }
-     //printf("\here %d\n",tObj.size());
-    for(int i =0 ; i < tObjZ.size(); i++)
-    {
-        //printf("jkadssadahds");
-        if(tObjZ[i]->health>0)tObjZ[i]->drawZ();
-    }
+     int c = 0;
+     for(int i =0 ; i < tObjZ.size(); i++)
+       {
+        if(tObjZ[i]->health > 0)
+        {
+            tObjZ[i]-> drawZ();
+            c++;
+        }
+        else
+        {
+            tObjZ[i]-> drawDead();
+        }}
+        if(c ==0)
+        {
+            printf("You win");
+            exit(0);
+        }
     flag = 0;
 
-
-
-
-   // }
-    //xcurr = movX;
-    //zcurr = movZ;
-    //tree::drawTree();
-
     moon::drawmoon();
-    tree::drawtree();
     glPopMatrix();
     glutSwapBuffers();
 }
-
 //--------------------------------  idleFunc  ----------------------------------
 
 void idleFunc (void)
@@ -771,9 +689,6 @@ const GLfloat high_shininess[] = { 100.0f };
     glMaterialfv(GL_FRONT, GL_DIFFUSE,   mat_diffuse);
     glMaterialfv(GL_FRONT, GL_SPECULAR,  mat_specular);
     glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
-
-
-
 }
 
 //----------------------------------  main  ------------------------------------
@@ -801,21 +716,134 @@ int main (int argc, char **argv)
     texture(); // Lighting and textures
 
     glPointSize(5);
-//    zombie::init();
-
     fPerson::health=100;
-
-
-
     glutMainLoop();
     }
- /********************************************** DRAFT ************************************************************************/
+ /********************************************************** DRAFT *************************************************/
 /*
+ //    tree::drawtree();
+    //movZ-=0.1*sin(rotAngle+90);
+        //glRotated(45,0,1,0);
+        //glTranslated(0.5,-3.7,2.9);
+
+                //notes drawing the face with
+
+    //nice to do's u can use a texture as the face of the zombie instead of drawing yourself
+    //but i couldn't find enough resources that teach that
+
+    //          ||
+    //        \ || /
+    //checkout \  /
+    //          \/
+    //https://www.youtube.com/watch?v=dV1E8vzoGb0
+    //https://community.khronos.org/t/loading-a-bitmap-image-to-use-it-as-a-texture-background-on-canvas-for-drawing/72323
+                //glRotated(45,0,1,0);
+
+                        //printf("jkadssadahds");
+
+                        //printf("\n%0.2f \t %0.2f \n",randx,randz);
+
+        //printf("\n----------->>%0.2f------%0.2f<<----------",x,z);
+
+  static void drawtree()
+    {
+        glPushMatrix();
+
+        glTranslated(0,0,-20);
+        tree::drawtreestem();
+        tree::drawfirstlayer();
+        tree::drawsecondlayer();
+        tree::drawthirdlayer();
+
+        glPopMatrix();
+    }
+ static void drawtree()
+    {
+        glPushMatrix();
+
+        glTranslated(0,0,-20);
+        tree::drawtreestem();
+        tree::drawfirstlayer();
+        tree::drawsecondlayer();
+        tree::drawthirdlayer();
+
+        glPopMatrix();
+    }
+//glRotated(45,0,1,0);
+//      basicShapes::cuboid(0.4,0.2,0.4);
+//printf("Shoot\n");
+//printf("\nMovx: %0.2f \t MovZ: %0.2f \t userAngle:%0.2f \t zombieAngle:%0.2f",movX,movZ,rotAngle,rotangleZombie);
+        //printf("movZ: %0.2f \t movZ: %0.2f \t userAngle:%0.2f \t",movX,movZ,rotAngle);
+//    tree::drawtree();
+
+     //printf("\here %d\n",tObj.size());
+             //printf("jkadssadahds");
+     //printf("\here %d\n",tObj.size());
+
+//the health
+//if(health != 0)
+    static void drawtree()
+    {
+        glPushMatrix();
+
+        glTranslated(0,0,-20);
+        tree::drawtreestem();
+        tree::drawfirstlayer();
+        tree::drawsecondlayer();
+        tree::drawthirdlayer();
+
+        glPopMatrix();
+    }
+
+    //zombie::drawZ();
+
+ // glRotated(45,0,1,0);
+        //basicShapes::cuboid(0.4,0.2,0.5);
+//-----> ''
+//if(z x )
+    //if(key==GLUT_KEY_LEFT){
+
+    //}
+    //else if(key==GLUT_KEY_RIGHT){
+
+   // }
+ // glRotated(45,0,1,0);
+        //basicShapes::cuboid(0.4,0.2,0.5);
+  //glRotated(rotAngle,0,1,0);
+
+    //printf("%0.2f\n",rotAngle);
+//double zombie::zZ;
+//double zombie::zX;
+//double zombie::chase;
+//glClearColor(130,128,122);
+
+    //glTranslatef    (0.0, 0.0, -20.0);
+    //glRotated(x,1,1,0);
+ //glTranslatef    (-movX, 0.0,-movZ );
+
+    //glTranslatef    (movX, 0.0,movZ );
+    //Drawing the zombie
+//    zombie::init();
+
+ /*tree::drawtreestem();
+    tree::drawfirstlayer();
+    tree::drawsecondlayer();
+    tree::drawthirdlayer();*/
+//if(xcurr != movX && zcurr != movZ)
+      //
+ // }
+    //xcurr = movX;
+    //zcurr = movZ;
+    //tree::drawTree();
+//glPushMatrix();
+        //glTranslated(0,0.5,-18.5);
+        //glRotated(0,0,1,0);
+        //glTranslated(0,-0.5,18.5);
   //zombie * ZB1 = new zombie(randxneg,randzneg);
 //zombie * ZB = new zombie(23,40);
 
 //    zombie::init();
-tree::drawtreestem();
+/*tree::drawtreestem();
     tree::drawfirstlayer();
     tree::drawsecondlayer();
 
@@ -857,5 +885,16 @@ public:
         zombie * ZB = new zombie(randx* -1,randz*-1);
      //   tObjZ.push_back(ZB1);
             }
-    */
+   // glRotated(-rotAngle,0,1,0);
+      // static double chase;
+   /* static void init(){
+    zombie::zX=10;
+    zombie::zZ=-10;
+    //zombie::zZ=0;
+    }
+     // glRotated(45,0,1,0);
+        //basicShapes::cuboid(0.4,0.2,0.5);
+          //glTranslated(0.5,-3.7,2.9);
+*/
+
 
