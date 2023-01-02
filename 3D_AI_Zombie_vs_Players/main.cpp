@@ -259,7 +259,7 @@ class zombie
 {
 //TODO create zombie draw function
 public:
-double zX,zZ,health =100;
+double zX,zZ,health = 100.0;
     zombie(double x, double z)
     {
         this->zX = x;
@@ -289,12 +289,16 @@ double zX,zZ,health =100;
      if(detectAngle - 4 <= -rotAngle  && detectAngle + 4 >= -rotAngle)
         {
         printf("Shooting\n");
+
         health -= 10;
+        printf("%d ----",health);
+
         }
-     printf("%d",health);
+     printf("%d ----",health);
 
     }
-
+//the health
+//if(health != 0)
     void drawZ()
     {
         glPushMatrix();
