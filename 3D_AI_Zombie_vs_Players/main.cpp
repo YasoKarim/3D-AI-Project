@@ -271,25 +271,26 @@ double zX,zZ,health =100;
     zombie::zZ=-10;
     //zombie::zZ=0;
     }*/
+    //Detect if there is a zombie or not
     void detect()
     {
      if(flag == 0)
         return;
      //Angle we want to look at
      double detectAngle = atan( ( movX - zX) / ( movZ - zZ )) * (180 / 3.14);
-     if(movZ<zZ){
+     if(movZ < zZ){
             detectAngle+=180;
         }
 
 
-    if(detectAngle<0)detectAngle+=360;
-    if(-rotAngle<0)rotAngle-=360;
+    if(detectAngle<0) detectAngle+=360;
+    if(-rotAngle<0) rotAngle-=360;
      //printf("%0.2f ------------ %0.2f----------%0.2f ------------%0.2f\n ",detectAngle,-rotAngle,movX,movZ);
      if(detectAngle - 4 <= -rotAngle  && detectAngle + 4 >= -rotAngle)
         {
         printf("Shooting\n");
-       health = health - 10;
-     }
+        health -= 10;
+        }
      printf("%d",health);
 
     }
@@ -330,7 +331,7 @@ double zX,zZ,health =100;
         glTranslated(0,0.1,0);
         //glRotated(45,0,1,0);
         basicShapes::cuboid(0.7,0.7,0.7);
-        glColor3f(1.0,0.0,0.0);
+        glColor3f(0.4,0.1,0.0);
         glTranslated(0,0,-1);
         basicShapes::cuboid(0.2,0.2,0.2);
         glPopMatrix();
@@ -568,7 +569,7 @@ void display (void)
         tObj[i]->drawTree();
     }
 int f = 0;
- if(tObjZ.size() <= 4)
+ if(tObjZ.size() <= 6)
     {
 
         double randx = rand() % 50 + 1;
@@ -576,8 +577,16 @@ int f = 0;
 
 
         zombie * ZB = new zombie(randx,randz);
+        zombie * zb1 = new zombie(randx*-1,randz * -1);
+        zombie * zb2 = new zombie(randx,randz * -1);
+        zombie * zb3 = new zombie(randx*-1,randz);
+        tObjZ.push_back(ZB);
+        tObjZ.push_back(zb1);
+        tObjZ.push_back(zb2);
+        tObjZ.push_back(zb3);
 
-     }//printf("\here %d\n",tObj.size());
+     }
+     //printf("\here %d\n",tObj.size());
     for(int i =0 ; i < tObjZ.size(); i++)
     {
         //printf("jkadssadahds");
