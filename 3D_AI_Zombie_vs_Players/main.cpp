@@ -192,7 +192,6 @@ void keyboardUp(unsigned char key,int x,int y){
         left=false;
     }
 
-
 }
 
 class fPerson
@@ -208,6 +207,7 @@ public:
         //left arm
         glPushMatrix();
         if(hitColor>0){
+
             glColor3f(0.9,0,0);
             hitColor--;
         }
@@ -309,6 +309,7 @@ int hitCounter;
         printf("Shooting\n");
 
         health -= 10;
+
         printf("%f ----",health);
 
         }
@@ -336,19 +337,23 @@ int hitCounter;
             zX+=0.009*cos((-rotangleZombie+270)*3.14/180);
         }
         else{
-
-
+            //sndPlaySound("zsound.wav",SND_ASYNC);
             if(hitCounter==120){
+                //sndPlaySound("zsound.wav",SND_SYNC);
+                PlaySound(TEXT("zsound.wav"),NULL,SND_ASYNC|SND_FILENAME);
                 fPerson::health-=20;
                 hitColor=30;
+
                 if(fPerson::health<=0){
                     printf("you were eaten");
                     exit(0);
                 }
+
                 hitCounter=0;
             }
             else{
                 hitCounter++;
+
             }
         }
 
@@ -798,6 +803,7 @@ int main (int argc, char **argv)
     glutKeyboardUpFunc(keyboardUp);
     glutSpecialFunc(specialKey);
     glutSpecialUpFunc(specialKeyUp);
+    //sndPlaySound("zsound.wav",SND_ASYNC);
     texture(); // Lighting and textures
 
     glPointSize(5);
