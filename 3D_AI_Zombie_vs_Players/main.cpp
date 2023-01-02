@@ -94,6 +94,7 @@ public:
      glVertex3f(-2,-2,1);
      glEnd();
 
+
       //back
       glBegin(GL_TRIANGLES);
       glVertex3f(0, 2, 0);
@@ -269,8 +270,10 @@ class zombie
 {
 //TODO create zombie draw function
 public:
+
 double zX,zZ,health =100;
 int hitCounter;
+
     zombie(double x, double z)
     {
         this->zX = x;
@@ -283,26 +286,36 @@ int hitCounter;
     zombie::zZ=-10;
     //zombie::zZ=0;
     }*/
+    //Detect if there is a zombie or not
     void detect()
     {
-        if(flag == 0)return;
-        //Angle we want to look at
-        double detectAngle = atan( ( movX - zX) / ( movZ - zZ )) * (180 / 3.14);
-        if(movZ<zZ)
+
+     if(flag == 0)
+        return;
+     //Angle we want to look at
+     double detectAngle = atan( ( movX - zX) / ( movZ - zZ )) * (180 / 3.14);
+     if(movZ < zZ){
+            detectAngle+=180;
+        }
+
+
+    if(detectAngle<0) detectAngle+=360;
+    if(-rotAngle<0) rotAngle-=360;
+     //printf("%0.2f ------------ %0.2f----------%0.2f ------------%0.2f\n ",detectAngle,-rotAngle,movX,movZ);
+     if(detectAngle - 4 <= -rotAngle  && detectAngle + 4 >= -rotAngle)
         {
-                detectAngle+=180;
-        }
+        printf("Shooting\n");
 
+        health -= 10;
+        printf("%f ----",health);
 
-        if(detectAngle<0)detectAngle+=360;
-        if(-rotAngle<0)rotAngle-=360;
-         //printf("%0.2f ------------ %0.2f----------%0.2f ------------%0.2f\n ",detectAngle,-rotAngle,movX,movZ);
-        if(detectAngle - 4 <= -rotAngle  && detectAngle + 4 >= -rotAngle){
-            //printf("Shooting\n");
         }
+     printf("%f  ----",health);
+
 
     }
-
+//the health
+//if(health != 0)
     void drawZ()
     {
         glPushMatrix();
@@ -311,8 +324,8 @@ int hitCounter;
         rotangleZombie = atan( (movX - zX) / ( movZ - zZ )) * (180 / 3.14);
         //printf("\nMovx: %0.2f \t MovZ: %0.2f \t userAngle:%0.2f \t zombieAngle:%0.2f",movX,movZ,rotAngle,rotangleZombie);
         //printf("movZ: %0.2f \t movZ: %0.2f \t userAngle:%0.2f \t",movX,movZ,rotAngle);
-        if(movZ>zZ){
-            rotangleZombie+=180;
+        if(movZ > zZ){
+            rotangleZombie += 180;
         }
         double disFromTar=calcDistance(zX,zZ,movX,movZ);
 
@@ -336,6 +349,8 @@ int hitCounter;
                 hitCounter++;
             }
         }
+
+
 
         //chase+=0.01;
         //printf("%0.2f -- %0.2f\n",zX,zZ);
@@ -361,7 +376,7 @@ int hitCounter;
         glTranslated(0,0.1,0);
         //glRotated(45,0,1,0);
         basicShapes::cuboid(0.7,0.7,0.7);
-        glColor3f(1.0,0.0,0.0);
+        glColor3f(0.4,0.1,0.0);
         glTranslated(0,0,-1);
         basicShapes::cuboid(0.2,0.2,0.2);
         glPopMatrix();
@@ -459,8 +474,8 @@ public:
     //code the pyramid inside basicShapes class in a separate function
     tree(double x, double z)
     {
-        this->x = x;
-        this->z = z;
+        this -> x = x;
+        this -> z = z;
     }
     void drawTree()
     {
@@ -594,50 +609,68 @@ void display (void)
     tree::drawtree();
  //   zombie::drawZ();
 
-    //generating random trees
+  //generating random trees
 
     //if(xcurr != movX && zcurr != movZ)
-      //  {
-    if(tObj.size() <= 50){
-    for(int i = 0;i < 2;i++)
+      //
+        int ftree =0;
+    if(tObj.size() <= 50)
+        {
+    for(int i = 0;i < 10;i++)
     {
+        //Positive x and z
         double randx = rand() % 50 + 1;
-        double randz = rand() % 50 + 1;
+        double randz =  rand() % 50 + 1;
+
         //printf("\n%0.2f \t %0.2f \n",randx,randz);
-        tree *t = new tree(randx,randz);
+        tree *t  = new tree(randx,randz);
+        tree *t1 = new tree(randx*-1,randz*-1);
+        tree *t2 = new tree(randx,randz*-1);
+        tree *t3 = new tree(randx*-1,randz);
+        //        tree *t2 = new tree(randz);
         tObj.push_back(t);
-    }
-     }//printf("\here %d\n",tObj.size());
+        tObj.push_back(t1);
+        tObj.push_back(t2);
+        tObj.push_back(t3);
+
+
+    }}
+     //printf("\here %d\n",tObj.size());
 
     for(int i =0 ; i < tObj.size(); i++)
     {
         //printf("jkadssadahds");
         tObj[i]->drawTree();
     }
- if(tObjZ.size() <= 4)
+int f = 0;
+ if(tObjZ.size() <= 6)
     {
 
         double randx = rand() % 50 + 1;
         double randz = rand() % 50 + 1;
-       // double randx = rand() % 50 +1;
 
-        //printf("\n%0.2f \t %0.2f \n",randx,randz);
+
         zombie * ZB = new zombie(randx,randz);
-        //zombie * ZB = new zombie(23,40);
+        zombie * zb1 = new zombie(randx*-1,randz * -1);
+        zombie * zb2 = new zombie(randx,randz * -1);
+        zombie * zb3 = new zombie(randx*-1,randz);
         tObjZ.push_back(ZB);
+        tObjZ.push_back(zb1);
+        tObjZ.push_back(zb2);
+        tObjZ.push_back(zb3);
 
-     }//printf("\here %d\n",tObj.size());
-
+     }
+     //printf("\here %d\n",tObj.size());
     for(int i =0 ; i < tObjZ.size(); i++)
     {
         //printf("jkadssadahds");
-        tObjZ[i]->drawZ();
+        if(tObjZ[i]->health>0)tObjZ[i]->drawZ();
     }
     flag = 0;
 
    // }
-    xcurr = movX;
-    zcurr = movZ;
+    //xcurr = movX;
+    //zcurr = movZ;
     //tree::drawTree();
 
     glPopMatrix();
@@ -710,11 +743,19 @@ int main (int argc, char **argv)
     glutSpecialFunc(specialKey);
     glutSpecialUpFunc(specialKeyUp);
     texture(); // Lighting and textures
+
     fPerson::health=100;
-//    zombie::init();
+
+
     glutMainLoop();
-}
-/* tree::drawtreestem();
+    }
+ /********************************************** DRAFT ************************************************************************/
+/*
+  //zombie * ZB1 = new zombie(randxneg,randzneg);
+//zombie * ZB = new zombie(23,40);
+
+//    zombie::init();
+tree::drawtreestem();
     tree::drawfirstlayer();
     tree::drawsecondlayer();
     tree::drawthirdlayer();
@@ -726,4 +767,33 @@ public:
         basicShapes::shperes(1);
     }
 };
+ double randx = rand() % 50 + 1;
+        double randz =  rand() % 50 + 1;
+        //printf("\n%0.2f \t %0.2f \n",randx,randz);
+        tree *t = new tree(randx * -1,randz * -1);
+//        tree *t2 = new tree(randz);
+        tObj.push_back(t);
+  //Negative z and x
+        double randxneg  = rand() % 50 + 1;
+        double randzneg =  rand() % 50 + 1;
+        //positive x Negative z
+        double randx  = rand() % 50 + 1;
+        double randzneg =  rand() % 50 + 1;
+        //Negative x and positive z
+        double randxneg  = rand() % 50 + 1;
+        double randz =  rand() % 50 + 1;
+     // double randx = rand() % 50 +1;
+      //double randxneg = rand() % 50 - 1;
+        //double randzneg = rand() % 50 - 1;
+//      printf("%d---------------- %d",randxneg,randzneg);
+        //printf("\n%0.2f \t %0.2f \n",randx,randz);
+      tObjZ.push_back(ZB);}
+
+        double randx  = rand() % 50 + 1;
+        double randz = rand() % 50 + 1;
+
+
+        zombie * ZB = new zombie(randx* -1,randz*-1);
+     //   tObjZ.push_back(ZB1);
+            }
     */
