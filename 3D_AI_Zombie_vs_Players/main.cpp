@@ -6,6 +6,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <vector>
+#include <mmsystem.h>
 //IMPORTANT polygons MUST be drawn counter-clockwise
 //design using https://technology.cpm.org/general/3dgraph/
 void keyboard(unsigned char key,int x,int y);
@@ -110,17 +111,7 @@ public:
        glPopMatrix ();
 
       }
-      static void square(double sqwidth=20.0, double sqlength=20.0){
-       glPushMatrix();
-       glScaled(sqwidth,0,sqlength);
-       glBegin(GL_POLYGON);
-       glVertex3f( -1,0,-1);
-       glVertex3f(1,0,-1);
-       glVertex3f(1,0,1);
-       glVertex3f(-1,0,1);
-       glEnd();
-       glPopMatrix();
-      }
+
 };
 
 bool right=false,left=false,forw=false,backw=false,rotR=false,rotL=false;
@@ -166,6 +157,7 @@ void keyboard(unsigned char key,int x,int y)
      }
      if(key == ' ')
      {
+       sndPlaySound("sound.wav",SND_ASYNC);
        flag = 1;
        //printf("Shoot\n");
      }
@@ -476,16 +468,18 @@ public:
       glPopMatrix();
    }
 };
-class ground{
-  public:
-static void drawground(){
+class stars{
+public:
+    static drawstars(){
       glPushMatrix();
-      glColor3f(0,0,0);
-      //glTranslatef(-1,0,-1);
-      basicShapes::square(20.0,20.0);
+      glBegin(GL_POINTS);
+      glColor3f(1,1,1);
+      glVertex3f(10,10,10);
+      glEnd();
       glPopMatrix();
     }
 };
+
 float xRotated = 90.0, yRotated = 0.0, zRotated = 0.0;
 float x=0;
 //------------------------------  reshapeFunc  ---------------------------------
@@ -568,7 +562,7 @@ void display (void)
     //Drawing the zombie
 
     tree::drawtree();
-//    zombie::drawZ();
+    //zombie::drawZ();
 
 
     //generating random trees
@@ -617,7 +611,7 @@ void display (void)
     zcurr = movZ;
     //tree::drawTree();
 
-    ground::drawground();
+    stars::drawstars();
     tree::drawtree();
     glPopMatrix();
     glutSwapBuffers();
@@ -691,7 +685,7 @@ int main (int argc, char **argv)
     glutSpecialFunc(specialKey);
     glutSpecialUpFunc(specialKeyUp);
     texture(); // Lighting and textures
-
+    glPointSize(5);
 //    zombie::init();
     glutMainLoop();
 }
