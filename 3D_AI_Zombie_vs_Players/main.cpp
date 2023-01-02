@@ -110,7 +110,7 @@ public:
       {
        glPushMatrix ();
        glScaled(radius,1,1);
-       glutSolidSphere (1.0, 5, 30);
+       glutSolidSphere (1.0, 50,50);
        glPopMatrix ();
 
       }
@@ -338,8 +338,7 @@ int hitCounter;
         }
         else{
             //sndPlaySound("zsound.wav",SND_ASYNC);
-            if(hitCounter==120){
-                //sndPlaySound("zsound.wav",SND_SYNC);
+            if(hitCounter==300){
                 PlaySound(TEXT("zsound.wav"),NULL,SND_ASYNC|SND_FILENAME);
                 fPerson::health-=20;
                 hitColor=30;
@@ -606,7 +605,7 @@ void display (void)
 
 
     glClear        (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glClearColor(100.0/255.0,128.0/255.0,122.0/255.0,0.0);
+    glClearColor(25.0/255.0, 25.0/255.0, 112.0/255.0,0.0);
     //glClearColor(130,128,122);
 
     //glTranslatef    (0.0, 0.0, -20.0);
@@ -617,6 +616,12 @@ void display (void)
     tree::drawfirstlayer();
     tree::drawsecondlayer();
     tree::drawthirdlayer();*/
+    glPushMatrix();
+    glColor3f(0,0.4,0.1);
+    glTranslated(-1,-5,-1);
+    basicShapes::cuboid(100,100,0);
+
+    glPopMatrix();
 
     glPushMatrix();
     if(rotL==true) rotAngle-=0.2;
@@ -677,24 +682,24 @@ void display (void)
         double randz =  rand() % 50 + 1;
 
         //printf("\n%0.2f \t %0.2f \n",randx,randz);
-        tree *t  = new tree(randx,randz);
-        tree *t1 = new tree(randx*-1,randz*-1);
-        tree *t2 = new tree(randx,randz*-1);
-        tree *t3 = new tree(randx*-1,randz);
+        tree *t  = new tree(randx , randz);
+        tree *t1 = new tree(randx * -1,randz * -1);
+        tree *t2 = new tree(randx, randz * -1);
+        tree *t3 = new tree(randx * -1,randz);
         //        tree *t2 = new tree(randz);
         tObj.push_back(t);
         tObj.push_back(t1);
         tObj.push_back(t2);
         tObj.push_back(t3);
+    }
 
-
-    }}
+    }
      //printf("\here %d\n",tObj.size());
 
     for(int i =0 ; i < tObj.size(); i++)
     {
         //printf("jkadssadahds");
-        tObj[i]->drawTree();
+        tObj[i]-> drawTree();
     }
 int f = 0;
  if(tObjZ.size() <= 6)
@@ -705,9 +710,9 @@ int f = 0;
 
 
         zombie * ZB = new zombie(randx,randz);
-        zombie * zb1 = new zombie(randx*-1,randz * -1);
+        zombie * zb1 = new zombie(randx *-1,randz * -1);
         zombie * zb2 = new zombie(randx,randz * -1);
-        zombie * zb3 = new zombie(randx*-1,randz);
+        zombie * zb3 = new zombie(randx * -1,randz);
         tObjZ.push_back(ZB);
         tObjZ.push_back(zb1);
         tObjZ.push_back(zb2);
