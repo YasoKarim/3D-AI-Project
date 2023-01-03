@@ -106,11 +106,12 @@ public:
 
       glPopMatrix();
       }
+      //Draw Sphere mainly for the moon
      static void shperes(double radius = 1.0)
       {
        glPushMatrix ();
-       glScaled(radius,1,1);
-       glutSolidSphere (1.0, 50, 50);
+       glScaled(radius,radius,radius);
+       glutSolidSphere (20.0, 50, 50);
        glPopMatrix ();
       }
 
@@ -119,8 +120,9 @@ public:
 bool right=false,left=false,forw=false,backw=false,rotR=false,rotL=false;
 double movX=0,movZ=0,rotAngle=0,rotangleZombie =0,hitColor=0;
 int flag = 0;
-
-double calcDistance(double x1,double z1,double x2,double z2){
+//Calculate Distance between zombie and player
+double calcDistance(double x1,double z1,double x2,double z2)
+{
     return sqrt(pow((x1-x2),2)+pow((z1-z2),2));
 }
 //Key input
@@ -138,8 +140,10 @@ void specialKeyUp(int key,int x,int y){
 
 void keyboard(unsigned char key,int x,int y)
 {
+     //Close Esc
      if(key == 27)
         exit(0);
+     //Full Screen
      if(key == 'f')
         glutFullScreen();
 
@@ -159,13 +163,13 @@ void keyboard(unsigned char key,int x,int y)
      {
        left=true;
      }
+     //Sound shooting
      if(key == ' ')
      {
        sndPlaySound("sound.wav",SND_ASYNC);
        flag = 1;
      }
 }
-// Unclicked keys
 void keyboardUp(unsigned char key,int x,int y){
 
     if(key=='w'){
@@ -181,14 +185,12 @@ void keyboardUp(unsigned char key,int x,int y){
         left=false;
     }
 
-
 }
 
 class fPerson
 {//TODO create first person shooter with shooting animation
 public:
     static int health;
-    //int direction;
     static void drawLeftArm()
     {
 
@@ -196,11 +198,13 @@ public:
         glTranslated(0,-0.5,-1.5);
         //left arm
         glPushMatrix();
-        if(hitColor>0){
+        if(hitColor > 0)
+        {
             glColor3f(0.9,0,0);
             hitColor--;
         }
-        else{
+        else
+        {
             glColor3f(0,0.9,0);
         }
 
@@ -214,8 +218,6 @@ public:
 
         //right arm
         glPushMatrix();
-        //sglColor3f(0,0.6,0);
-
         glTranslated(0.3,0,0);
         glRotated(80,-1,0,0);
         glRotated(20,0,0,1);
@@ -284,12 +286,12 @@ int hitCounter;
 
      if(detectAngle<0) detectAngle+=360;
      if(-rotAngle<0) rotAngle-=360;
-     //printf("%0.2f ------------ %0.2f----------%0.2f ------------%0.2f\n ",detectAngle,-rotAngle,movX,movZ);
      if(detectAngle - 4 <= -rotAngle  && detectAngle + 4 >= -rotAngle)
         {
         printf("Shooting\n");
 
         health -= 10;
+
         printf("%f ----",health);
 
         }
@@ -307,38 +309,36 @@ int hitCounter;
         {
             rotangleZombie += 180;
         }
-        double disFromTar=calcDistance(zX,zZ,movX,movZ);
+        double disFromTar = calcDistance(zX,zZ,movX,movZ);
 
-        if(disFromTar>5)
+        if(disFromTar > 5)
         {
             zZ+=0.009*sin((-rotangleZombie+270)*3.14/180);
             zX+=0.009*cos((-rotangleZombie+270)*3.14/180);
         }
-        else
-        {
-            if(hitCounter==120)
+
+        else{
+            if(hitCounter==300)
                 {
+                PlaySound(TEXT("zsound.wav"),NULL,SND_ASYNC|SND_FILENAME);
                 fPerson::health-=20;
                 hitColor=30;
-                if(fPerson::health <= 0){
+
+                if(fPerson::health<=0){
                     printf("you were eaten");
                     exit(0);
                 }
+
                 hitCounter=0;
                 }
-            else{
+
+            else
+                {
                 hitCounter++;
                 }
-        }
-
-
-
-        //chase+=0.01;
-        //printf("%0.2f -- %0.2f\n",zX,zZ);
+                }
         glTranslated(zX,0,zZ);
-        //rotangleZombie = atan( (movX-zX) / ( movZ+zZ )) * (180 / 3.14);
         glRotated(rotangleZombie,0,1,0);
-        //glTranslated(0,0,-chase);
         zombie::drawhead();
         zombie::Body();
         zombie::leftLeg();
@@ -348,7 +348,7 @@ int hitCounter;
         detect();
         glPopMatrix();
     }
-
+    //When killed it falls on the ground
     void drawDead()
     {
         glPushMatrix();
@@ -365,20 +365,29 @@ int hitCounter;
     //Drawing head
     static void drawhead()
     {
+
+        //right eye
+        glPushMatrix();
+        glColor3f(0.4,0.1,0.0);
+        glTranslated(-0.3,0.1,-1.0);
+        basicShapes::cuboid(0.1,0.1,0.1);
+        glPopMatrix();
+        //left eye
+        glPushMatrix();
+        glColor3f(0.4,0.1,0.0);
+        glTranslated(0.3,0.1,-1.0);
+        basicShapes::cuboid(0.1,0.1,0.1);
+        glPopMatrix();
+        // head
         glPushMatrix();
         glColor3f(0,0.7,0);
         glTranslated(0,0.1,0);
         basicShapes::cuboid(0.7,0.7,0.7);
-        glColor3f(0.4,0.1,0.0);
-        glTranslated(0,0,-1);
-        basicShapes::cuboid(0.2,0.2,0.2);
         glPopMatrix();
 
-    }
-    static void zombieEyes()
-    {
 
     }
+
     //Drawing the body
     static void Body()
     {
@@ -392,7 +401,6 @@ int hitCounter;
     //Drawing th left leg
     static void leftLeg()
     {
-
         glPushMatrix();
         glColor3f(0,0.5,0);
         glTranslated(-0.5,-3.7,0);
@@ -494,17 +502,7 @@ public:
       glPopMatrix();
    }
 };
-class stars{
-public:
-    static drawstars(){
-      glPushMatrix();
-      glBegin(GL_POINTS);
-      glColor3f(1,1,1);
-      glVertex3f(10,15,0);
-      glEnd();
-      glPopMatrix();
-    }
-};
+//Draw Moon
 class moon
 {
 public :
@@ -533,31 +531,37 @@ void reshapeFunc (int w, int h)
 
 //------------------------------  display   -------------------------------
 int fPerson::health;
-double accm=0.01;
+//double accm=0.01;
 
- int xcurr , zcurr ,xcurrZ,zcurrZ;
+ //int xcurr , zcurr ,xcurrZ,zcurrZ;
 std::vector <tree *> tObj;
 std::vector <zombie *> tObjZ;
 
 
 void display (void)
 {
-
-
     glClear        (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glClearColor(100.0/255.0,128.0/255.0,122.0/255.0,0.0);
-
-	//Your code is written here
+    //Background Color
+    glClearColor(25.0/255.0, 25.0/255.0, 112.0/255.0,0.0);
     fPerson::drawLeftArm();//replace this with the draw function you want to test
+    //Ground
     glPushMatrix();
-    if(rotL==true) rotAngle-=0.2;
-    if(rotR==true) rotAngle+=0.2;
+    glColor3f(0,0.4,0.1);
+    glTranslated(-1,-5,-1);
+    basicShapes::cuboid(100,100,0);
+
+    glPopMatrix();
+
+    glPushMatrix();
+    if(rotL == true) rotAngle -= 0.2;
+    if(rotR == true) rotAngle += 0.2;
     if(rotAngle >= 360) rotAngle -= 360;
     if(rotAngle <= -360) rotAngle += 360;
 
     glRotated(rotAngle,0,1,0);
     //calculate position
-    if(left==true){
+    if(left==true)
+    {
         movZ+=0.02*sin((rotAngle+180)*3.14/180);
         movX+=0.02*cos((rotAngle+180)*3.14/180);
     }
@@ -567,7 +571,6 @@ void display (void)
         movX+=0.02*cos((rotAngle)*3.14/180);
     }
     if(backw==true){
-        //accm+=0.01;
         movZ+=0.02*sin((rotAngle+90)*3.14/180);
         movX+=0.02*cos((rotAngle+90)*3.14/180);
     }
@@ -582,7 +585,6 @@ void display (void)
 
     glTranslatef    (-movX, 0.0, -movZ);
   //generating random trees
-    int ftree = 0;
     if(tObj.size() <= 50)
         {
     for(int i = 0;i < 10;i++)
@@ -595,7 +597,6 @@ void display (void)
         tree *t1 = new tree(randx * -1,randz * -1);
         tree *t2 = new tree(randx, randz * -1);
         tree *t3 = new tree(randx * -1,randz);
-        //        tree *t2 = new tree(randz);
         tObj.push_back(t);
         tObj.push_back(t1);
         tObj.push_back(t2);
@@ -603,12 +604,11 @@ void display (void)
     }
 
     }
-
+    //Drawing of random trees
     for(int i =0 ; i < tObj.size(); i++)
     {
                 tObj[i]-> drawTree();
     }
-int f = 0;
  if(tObjZ.size() <= 6)
     {
 
@@ -626,6 +626,7 @@ int f = 0;
         tObjZ.push_back(zb3);
 
      }
+    //Check Zombie if dead or alive
      int c = 0;
      for(int i =0 ; i < tObjZ.size(); i++)
        {
@@ -634,10 +635,13 @@ int f = 0;
             tObjZ[i]-> drawZ();
             c++;
         }
+
         else
         {
             tObjZ[i]-> drawDead();
-        }}
+        }
+        }
+
         if(c ==0)
         {
             printf("You win");
@@ -700,7 +704,7 @@ int main (int argc, char **argv)
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE); // buffer mode
     glutInitWindowSize     (800, 700);
     glutInitWindowPosition (700, 200);
-    glutCreateWindow       ("Zombie vs Player");
+    glutCreateWindow       ("Zombie vs Player Yasmine Karim 20102062 Mohamed Dwidar 20100361 Rowan Sherif 20102728");
 
 
     glClearColor (1.0, 1.0, 1.0, 0.0);
@@ -721,6 +725,44 @@ int main (int argc, char **argv)
     }
  /********************************************************** DRAFT *************************************************/
 /*
+int f = 0;
+
+    int ftree = 0;
+
+class stars{
+public:
+    static drawstars(){
+      glPushMatrix();
+      glBegin(GL_POINTS);
+      glColor3f(1,1,1);
+      glVertex3f(10,15,0);
+      glEnd();
+      glPopMatrix();
+    }
+};
+//glTranslated(0,0,-chase);
+
+//sglColor3f(0,0.6,0);
+
+    //int direction;
+   //accm+=0.01;
+
+	//Your code is written here
+
+        //        tree *t2 = new tree(randz);
+            //sndPlaySound("zsound.wav",SND_ASYNC);
+
+        //rotangleZombie = atan( (movX-zX) / ( movZ+zZ )) * (180 / 3.14);
+
+    //glClearColor(130,128,122);
+
+ /*tree::drawtreestem();
+    tree::drawfirstlayer();
+    tree::drawsecondlayer();
+    tree::drawthirdlayer();*/
+//sndPlaySound("zsound.wav",SND_ASYNC);
+//chase+=0.01;
+        //printf("%0.2f -- %0.2f\n",zX,zZ);
  //    tree::drawtree();
     //movZ-=0.1*sin(rotAngle+90);
         //glRotated(45,0,1,0);
@@ -745,7 +787,7 @@ int main (int argc, char **argv)
 
         //printf("\n----------->>%0.2f------%0.2f<<----------",x,z);
 
-  static void drawtree()
+ /* static void drawtree()
     {
         glPushMatrix();
 
@@ -782,7 +824,7 @@ int main (int argc, char **argv)
 
 //the health
 //if(health != 0)
-    static void drawtree()
+/*    static void drawtree()
     {
         glPushMatrix();
 
