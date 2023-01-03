@@ -1,8 +1,9 @@
 # 3D-AI-Project
 Project for educational purpose for Computer Graphics - ( CS352 )<br/>
 ## Contributors <br/>
-1. ### [Mohamed Dwidar](https://github.com/PROG-MohamedDwidar)
-2. ### [Rowan Sherif](https://github.com/rowansherif)
+1. ### [Yasmine Karim](https://github.com/YasoKarim)
+2. ### [Mohamed Dwidar](https://github.com/PROG-MohamedDwidar)
+3. ### [Rowan Sherif](https://github.com/rowansherif)
 ## Project idea
 It is a game where zombies vs player where the player mission is to kill the zombies And win the game else 
 he will loss and be eaten by the zombies.
