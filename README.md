@@ -1,6 +1,6 @@
-# 3D-AI-Project
-Project for educational purpose for Computer Graphics - ( CS352 )
-##Contributors
+#3D-AI-Project
+Project for educational purpose for Computer Graphics - ( CS352 )<br/>
+##Contributors </br>
 1- [Mohamed Dwidar](https://github.com/PROG-MohamedDwidar)
 2- [Rowan Sherif](https://github.com/rowansherif)
 <br />
