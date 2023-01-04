@@ -16,6 +16,5 @@ he will loss and be eaten by the zombies.
 2. Manual Shapes was drawn by the help of[Technology.cpm.org](https://technology.cpm.org/general/3dgraph/)
 3. Angles were drawn manually on graphs to get accurate output .
 4. Vector concept was used, **linear algbera is very important in that project**.
-<br / >
 # Enjoy playing the game :D !
 
